@@ -8,8 +8,8 @@ import com.kirik.mcadmin.core.util.MCAdminCommandException;
 import com.kirik.mcadmin.core.util.Utils;
  
 //TODO This kinda works, but also really doesn't.
-@Name("setnick")
-public class SetNickCommand extends BaseCommand {
+@Name("settag")
+public class SetTagCommand extends BaseCommand {
 	
 	@Override
 	public boolean onCommandPlayer(Player player, Command command, String s, String[] args) throws MCAdminCommandException {
@@ -22,14 +22,14 @@ public class SetNickCommand extends BaseCommand {
 		
 		String newNick = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
 		if(newNick.equals("none")){
-			targetPlayer.setDisplayName(targetName);
-			playerHelper.setPlayerNick(targetName, null);
-			playerHelper.sendServerMessage(player.getName() + " reset the nickname of " + targetName + "\u00a7f!");
+			//targetPlayer.setDisplayName(targetName);
+			playerHelper.setPlayerPrefix(targetPlayer, null);
+			playerHelper.sendServerMessage(player.getName() + " reset the tag of " + targetName + "\u00a7f!");
 			
 		}else{
-			targetPlayer.setDisplayName(newNick);
-			playerHelper.setPlayerNick(targetName, newNick);
-			playerHelper.sendServerMessage(player.getName() + " set nickname of " + targetName + " to " + newNick + "\u00a7f!");
+			//targetPlayer.setDisplayName(newNick);
+			playerHelper.setPlayerPrefix(targetPlayer, newNick);
+			playerHelper.sendServerMessage(player.getName() + " set tag of " + targetName + " to " + newNick + "\u00a7f!");
 		}
 		return true;
 	}

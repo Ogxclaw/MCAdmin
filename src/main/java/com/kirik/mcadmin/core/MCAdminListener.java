@@ -20,7 +20,13 @@ public class MCAdminListener implements Listener, Runnable {
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event){
-		event.setJoinMessage(ChatColor.DARK_GREEN + "[+] " + ChatColor.RESET + event.getPlayer().getDisplayName() + ChatColor.YELLOW + " connected!");
+		Player player = event.getPlayer();
+		//TODO Aggravating, but no better way to fix this at the moment. Unless I hard code ranks which is a big no-no
+		event.setJoinMessage(ChatColor.DARK_GREEN + "[+]" + plugin.playerHelper.getPlayerPrefix(player).substring(0,2).replace('&', '\u00a7') + " " + player.getDisplayName() + ChatColor.YELLOW + " connected!");
+		//MOTD
+		//TODO Make this go to a file
+		plugin.playerHelper.sendDirectedMessage(player, "Welcome!");
+		plugin.playerHelper.sendDirectedMessage(player, "This is the message of the day!");
 	}
 	
 	@EventHandler
@@ -40,8 +46,12 @@ public class MCAdminListener implements Listener, Runnable {
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event){
 		//TODO Just make a big ass hook class you fucking imbred.
-		String prefix = plugin.chat.getGroupPrefix(plugin.getServer().getWorld("world"), plugin.permission.getPrimaryGroup(event.getPlayer()));
-		event.setFormat(prefix + event.getPlayer().getDisplayName() + ChatColor.WHITE + ": " + event.getMessage());
+		Player player = event.getPlayer();
+		if(plugin.playerHelper.getPersonalPlayerPrefix(player) != null){
+			event.setFormat(plugin.playerHelper.getPersonalPlayerPrefix(player) + " " + player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage());
+		}else{
+			event.setFormat(plugin.playerHelper.getPlayerPrefix(player) + " " + player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage());
+		}
 	}
 	
 	@Override

@@ -38,7 +38,7 @@ public class OfflinePlayer extends AbstractPlayer {
 		world = server.getWorld("world"); //default val
 		location = world.getSpawnLocation(); //default val
 		
-		MCAdmin.instance.playerHelper.setPlayerDisplayName(this);
+		//MCAdmin.instance.playerHelper.setPlayerDisplayName(this);
 		
 		if(playerFile == null || !playerFile.exists())
 			return;

@@ -1,13 +1,7 @@
 package com.kirik.mcadmin.core.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -99,62 +93,7 @@ public class PlayerHelper extends StateContainer {
 		return null;
 	}
 	
-	//TODO CHANGE FIRST STRING TO UUID
-	private Hashtable<String, String> playernicks = new Hashtable<String, String>();
-	@Loader({"nicks", "nick", "nicknames", "nickname", "nick_names", "nick_name"})
-	public void loadPlayerNames(){
-		playernicks.clear();
-		try {
-			BufferedReader stream = new BufferedReader(new FileReader("player-nicks.txt"));
-			String line;
-			int lpos;
-			while((line = stream.readLine()) != null){
-				lpos = line.lastIndexOf('=');
-				playernicks.put(line.substring(0, lpos), line.substring(lpos+1));
-			}
-			stream.close();
-		}catch(Exception e){}
-	}
-	
-	@Saver({"nicks", "nick", "nicknames", "nickname", "nick_names", "nick_name"})
-	public void savePlayerNicks(){
-		try {
-			BufferedWriter stream = new BufferedWriter(new FileWriter("player-nicks.txt"));
-			Enumeration<String> e = playernicks.keys();
-			while(e.hasMoreElements()){
-				String key = e.nextElement();
-				stream.write(key + "=" + playernicks.get(key));
-				stream.newLine();
-			}
-			stream.close();
-		}catch(Exception e){}
-	}
-	
-	public String getPlayerNick(String name){
-		name = name.toLowerCase();
-		if(playernicks.containsKey(name))
-			return playernicks.get(name);
-		else
-			return null;
-	}
-	
-	public void setPlayerNick(String name, String tag){
-		name = name.toLowerCase();
-		if(tag == null){
-			playernicks.remove(name);
-		}else{
-			playernicks.put(name, tag);
-		}
-		savePlayerNicks();
-	}
-	
-	public void setPlayerDisplayName(Player player){
-		String nick = getPlayerNick(player.getName());
-		if(nick == null)
-			nick = player.getName();
-		player.setDisplayName(nick);
-	}
-	
+	//message sending
 	public void sendServerMessage(String msg){
 		sendServerMessage(msg, '5');
 	}
@@ -169,11 +108,26 @@ public class PlayerHelper extends StateContainer {
 		}
 	}
 	
-	/*public void sendServerMessage(String msg){
-		sendServerMessage(msg, permission, '5');
-	}*/
+	public void sendDirectedMessage(Player player, String s){
+		s = "\u00a75" + "[MCAdmin] \u00a7f" + s;
+		player.sendMessage(s);
+	}
 	
-	/*public void sendServerMessage(String msg, CommandSender... exceptPlayers){
-		
-	}*/
+	//prefix
+	public String getPlayerPrefix(Player player){
+		return plugin.chat.getGroupPrefix(player.getWorld(), this.getPlayerRank(player));
+	}
+	
+	public String getPersonalPlayerPrefix(Player player){
+		return plugin.chat.getPlayerPrefix(player);
+	}
+	
+	public void setPlayerPrefix(Player player, String prefix){
+		plugin.chat.setPlayerPrefix(player, prefix);
+	}
+	
+	//ranks
+	public String getPlayerRank(Player player){
+		return plugin.permission.getPrimaryGroup(player);
+	}
 }
