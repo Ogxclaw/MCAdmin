@@ -8,7 +8,6 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 
-import com.kirik.mcadmin.core.MCAdmin;
 import com.kirik.mcadmin.core.util.PlayerHelper;
 
 public class OfflinePlayer extends AbstractPlayer {

@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kirik.mcadmin.core.MCAdmin;
@@ -108,9 +109,14 @@ public class PlayerHelper extends StateContainer {
 		}
 	}
 	
-	public void sendDirectedMessage(Player player, String s){
+	public static void sendDirectedMessage(CommandSender commandSender, String s){
 		s = "\u00a75" + "[MCAdmin] \u00a7f" + s;
-		player.sendMessage(s);
+		commandSender.sendMessage(s);
+	}
+	
+	public static void sendDirectedMessage(CommandSender commandSender, String s, char c){
+		s = "\u00a7" + c + "[MCAdmin] \u00a7f" + s;
+		commandSender.sendMessage(s);
 	}
 	
 	//prefix

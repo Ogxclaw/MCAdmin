@@ -6,7 +6,8 @@ import org.bukkit.craftbukkit.v1_12_R1.command.ColouredConsoleSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.kirik.mcadmin.commands.BaseCommand;
+import com.kirik.mcadmin.commands.system.CommandSystem;
+import com.kirik.mcadmin.componentsystem.ComponentSystem;
 import com.kirik.mcadmin.core.util.PlayerHelper;
 import com.kirik.mcadmin.core.util.StateContainer;
 
@@ -18,6 +19,8 @@ public class MCAdmin extends JavaPlugin {
 	
 	public static MCAdmin instance;
 	public PlayerHelper playerHelper;
+	public CommandSystem commandSystem;
+	public ComponentSystem componentSystem = new ComponentSystem();
 	
 	private MCAdminListener listener;
 	
@@ -26,21 +29,22 @@ public class MCAdmin extends JavaPlugin {
 	public Chat chat = null;
 	
 	public MCAdmin(){
-		super();
 		instance = this;
-		
+		componentSystem.registerComponents();
 	}
 	
 	@Override
 	public void onEnable(){
 		listener = new MCAdminListener(this);
 		playerHelper = new PlayerHelper(this);
+		commandSystem = new CommandSystem(this);
+		componentSystem.registerCommands();
 		setupPermissions();
 		setupChat();
 		logToConsole("Vault Hooked.");
 		StateContainer.loadAll();
 		logToConsole("Config files loaded.");
-		BaseCommand.registerCommands();
+		//BaseCommand.registerCommands();
 		logToConsole("Commands loaded.");
 	}
 	
@@ -73,7 +77,7 @@ public class MCAdmin extends JavaPlugin {
 		log(Level.INFO, msg);
 	}
 	
-	public void logToConsole(String msg){
+	public static void logToConsole(String msg){
 		ColouredConsoleSender.getInstance().sendMessage(ChatColor.DARK_PURPLE + "[MCAdmin] " + ChatColor.WHITE + msg);
 	}
 	

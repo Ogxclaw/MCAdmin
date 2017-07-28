@@ -3,8 +3,10 @@ package com.kirik.mcadmin.core;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -51,6 +53,19 @@ public class MCAdminListener implements Listener, Runnable {
 			event.setFormat(plugin.playerHelper.getPersonalPlayerPrefix(player) + " " + player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage());
 		}else{
 			event.setFormat(plugin.playerHelper.getPlayerPrefix(player) + " " + player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage());
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPreprocessCommand(PlayerCommandPreprocessEvent event){
+		final Player player = event.getPlayer();
+		final String cmdString = event.getMessage().substring(1).trim();
+		
+		if(plugin.commandSystem.runCommand(player, cmdString)){
+			event.setCancelled(true);
+			event.setMessage("/youdontwantthiscommand " + event.getMessage());
+		}else{
+			plugin.log("Other Command: " + player.getName() + ": " + cmdString);
 		}
 	}
 	
