@@ -1,4 +1,4 @@
-package com.kirik.mcadmin.core.util;
+package com.kirik.mcadmin.main;
 
 public class MCAdminCommandException extends Exception {
 

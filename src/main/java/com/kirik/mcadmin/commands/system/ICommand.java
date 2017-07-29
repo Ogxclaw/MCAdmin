@@ -11,8 +11,8 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import com.kirik.mcadmin.core.MCAdmin;
-import com.kirik.mcadmin.core.util.MCAdminCommandException;
 import com.kirik.mcadmin.core.util.PlayerHelper;
+import com.kirik.mcadmin.main.MCAdminCommandException;
 
 import gnu.trove.map.TCharObjectMap;
 import gnu.trove.map.hash.TCharObjectHashMap;
@@ -296,13 +296,14 @@ public abstract class ICommand {
 		final String requiredPermission = getRequiredPermission();
 		if (requiredPermission != null)
 			return commandSender.hasPermission(requiredPermission);
+		
+		return true;
 
 		// TODO FIX
 		// final int playerLevel = PlayerHelper.getPlayerLevel(commandSender);
-		final int requiredLevel = getRequiredLevel();
+		//final int requiredLevel = getRequiredLevel();
 
 		// return playerLevel >= requiredLevel;
-		return true; // temp
 	}
 
 	public String[] getNames() {

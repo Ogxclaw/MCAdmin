@@ -1,4 +1,4 @@
-package com.kirik.mcadmin.offlinebukkit;
+package com.kirik.mcadmin.main.offlinebukkit;
 
 import java.io.File;
 import java.util.UUID;

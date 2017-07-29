@@ -9,7 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.kirik.mcadmin.commands.system.CommandSystem;
 import com.kirik.mcadmin.componentsystem.ComponentSystem;
 import com.kirik.mcadmin.core.util.PlayerHelper;
-import com.kirik.mcadmin.core.util.StateContainer;
+import com.kirik.mcadmin.main.StateContainer;
+import com.kirik.mcadmin.main.listeners.MCAdminPlayerListener;
 
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
@@ -22,7 +23,7 @@ public class MCAdmin extends JavaPlugin {
 	public CommandSystem commandSystem;
 	public ComponentSystem componentSystem = new ComponentSystem();
 	
-	private MCAdminListener listener;
+	private MCAdminPlayerListener listener;
 	
 	//VAULT
 	public Permission permission = null;
@@ -35,17 +36,24 @@ public class MCAdmin extends JavaPlugin {
 	
 	@Override
 	public void onEnable(){
-		listener = new MCAdminListener(this);
 		playerHelper = new PlayerHelper(this);
+		
+		StateContainer.loadAll();
+		
 		commandSystem = new CommandSystem(this);
 		componentSystem.registerCommands();
+		logToConsole("Commands loaded.");
+		
+		new MCAdminPlayerListener();
+		componentSystem.registerListeners();
+		logToConsole("Listeners loaded.");
+		
 		setupPermissions();
 		setupChat();
 		logToConsole("Vault Hooked.");
-		StateContainer.loadAll();
-		logToConsole("Config files loaded.");
+		//logToConsole("Config files loaded.");
 		//BaseCommand.registerCommands();
-		logToConsole("Commands loaded.");
+
 	}
 	
 	private boolean setupPermissions(){
@@ -64,7 +72,7 @@ public class MCAdmin extends JavaPlugin {
         return (chat != null);
 	}
 	
-	public MCAdminListener getMCAdminListener(){
+	public MCAdminPlayerListener getPlayerListener(){
 		return listener;
 	}
 	
@@ -77,7 +85,7 @@ public class MCAdmin extends JavaPlugin {
 		log(Level.INFO, msg);
 	}
 	
-	public static void logToConsole(String msg){
+	public void logToConsole(String msg){
 		ColouredConsoleSender.getInstance().sendMessage(ChatColor.DARK_PURPLE + "[MCAdmin] " + ChatColor.WHITE + msg);
 	}
 	

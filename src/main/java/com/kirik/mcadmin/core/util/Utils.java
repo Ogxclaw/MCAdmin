@@ -127,7 +127,7 @@ public class Utils {
 		return ret;
 	}
 	
-	//"That's complicated" - Brendan 2017 - In reference to the now simpler, and deprecated func above
+	//Added a package intake var
 	public static <T> List<Class<? extends T>> getSubClasses(Class<T> baseClass, String packageName) {
 		final List<Class<? extends T>> ret = new ArrayList<>();
 		final File file;

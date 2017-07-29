@@ -11,7 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kirik.mcadmin.core.MCAdmin;
-import com.kirik.mcadmin.offlinebukkit.OfflinePlayer;
+import com.kirik.mcadmin.main.StateContainer;
+import com.kirik.mcadmin.main.offlinebukkit.OfflinePlayer;
 
 public class PlayerHelper extends StateContainer {
 	
@@ -109,7 +110,7 @@ public class PlayerHelper extends StateContainer {
 		}
 	}
 	
-	public static void sendDirectedMessage(CommandSender commandSender, String s){
+	public void sendDirectedMessage(CommandSender commandSender, String s){
 		s = "\u00a75" + "[MCAdmin] \u00a7f" + s;
 		commandSender.sendMessage(s);
 	}

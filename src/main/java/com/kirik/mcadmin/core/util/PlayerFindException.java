@@ -1,5 +1,7 @@
 package com.kirik.mcadmin.core.util;
 
+import com.kirik.mcadmin.main.MCAdminCommandException;
+
 public class PlayerFindException extends MCAdminCommandException {
 	
 	/**

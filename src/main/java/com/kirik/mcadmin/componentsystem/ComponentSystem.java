@@ -9,6 +9,7 @@ import com.kirik.mcadmin.core.MCAdmin;
 public class ComponentSystem {
 	
 	private final Map<String, Component> loadedComponents = new LinkedHashMap<>();
+	public MCAdmin plugin = MCAdmin.instance;
 	
 	public void registerComponents(){
 		//if the time ever comes for this to be important, it'll be here
@@ -16,14 +17,14 @@ public class ComponentSystem {
 	
 	public void registerCommands() {
 		for (Entry<String, Component> entry : loadedComponents.entrySet()) {
-			MCAdmin.logToConsole("Registering commands for component '"+entry.getKey()+"'.");
+			plugin.logToConsole("Registering commands for component '"+entry.getKey()+"'.");
 			entry.getValue().registerCommands();
 		}
 	}
 
 	public void registerListeners() {
 		for (Entry<String, Component> entry : loadedComponents.entrySet()) {
-			System.out.println("Registering listeners for component '"+entry.getKey()+"'.");
+			plugin.logToConsole("Registering listeners for component '"+entry.getKey()+"'.");
 			entry.getValue().registerListeners();
 		}
 	}

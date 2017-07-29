@@ -7,10 +7,10 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 
 import com.kirik.mcadmin.core.MCAdmin;
-import com.kirik.mcadmin.core.util.MCAdminCommandException;
-import com.kirik.mcadmin.core.util.PermissionDeniedException;
 import com.kirik.mcadmin.core.util.PlayerHelper;
 import com.kirik.mcadmin.core.util.Utils;
+import com.kirik.mcadmin.main.MCAdminCommandException;
+import com.kirik.mcadmin.main.PermissionDeniedException;
 
 public class CommandSystem {
 	private final MCAdmin plugin;
@@ -24,7 +24,9 @@ public class CommandSystem {
 
 	public void scanCommands() {
 		commands.clear();
+		scanCommands("com.kirik.mcadmin.chat");
 		scanCommands("com.kirik.mcadmin.core");
+		scanCommands("com.kirik.mcadmin.permissions");
 	}
 
 	public void scanCommands(String packageName) {
@@ -67,10 +69,13 @@ public class CommandSystem {
 			final String playerName = commandSender.getName();
 			final ICommand icmd = commands.get(cmd);
 			try {
+				if(!icmd.canPlayerUseCommand(commandSender))
+					throw new PermissionDeniedException();
 				if (needsLogging(commandSender, icmd)) {
 					String logmsg = "MCAdmin Command: " + playerName + ": " + cmd + " " + argStr;
 					plugin.log(logmsg);
 				}
+				
 				icmd.run(commandSender, args, argStr, cmd);
 			} catch (PermissionDeniedException e) {
 				String logmsg = "MCAdmin Command denied: " + playerName + ": " + cmd + " " + argStr;
@@ -81,10 +86,10 @@ public class CommandSystem {
 				PlayerHelper.sendDirectedMessage(commandSender, e.getMessage(), e.getColor());
 			} catch (Exception e) {
 				if (commandSender.hasPermission("mcadmin.detailederrors")) {
-					PlayerHelper.sendDirectedMessage(commandSender, "Command error: " + e + " in " + e.getStackTrace()[0]);
+					plugin.playerHelper.sendDirectedMessage(commandSender, "Command error: " + e + " in " + e.getStackTrace()[0]);
 					e.printStackTrace();
 				} else {
-					PlayerHelper.sendDirectedMessage(commandSender, "Command error!");
+					plugin.playerHelper.sendDirectedMessage(commandSender, "Command error!");
 				}
 			}
 			return true;
