@@ -1,9 +1,7 @@
 package com.kirik.mcadmin.core.util;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.kirik.mcadmin.core.MCAdmin;
 import com.kirik.mcadmin.main.StateContainer;
 import com.kirik.mcadmin.main.offlinebukkit.OfflinePlayer;
+import com.kirik.mcadmin.permissions.PermissionLevel;
 
 public class PlayerHelper extends StateContainer {
 	
@@ -28,29 +27,7 @@ public class PlayerHelper extends StateContainer {
 			return onlinePlayer;
 		
 		return new OfflinePlayer(plugin.getServer(), name);
-	}
-	
-	public static File getPlayerFile(String playerName, String world){
-		File directory = new File(world + "/players/");
-		
-		if(!directory.exists())
-			return null;
-		
-		if(!directory.isDirectory())
-			return null;
-		
-		for(String file : directory.list()){
-			if(!file.equalsIgnoreCase(playerName + ".dat"))
-				continue;
-			
-			return new File(world + "/players/" + file);
-		}
-		return null;
-	}
-	
-	public static File getPlayerFile(UUID playerUUID, String world){
-		return new File(world+"/players/" +playerUUID.toString() + ".dat");
-	}
+	}	
 	
 	private static final Pattern quotePattern = Pattern.compile("^\"(.*)\"$");
 	public Player matchPlayerSingle(String subString, boolean implicitlyLiteral) throws PlayerNotFoundException, MultiplePlayersFoundException {
@@ -136,5 +113,28 @@ public class PlayerHelper extends StateContainer {
 	//ranks
 	public String getPlayerRank(Player player){
 		return plugin.permission.getPrimaryGroup(player);
+	}
+	
+	//level
+	public int getPlayerLevel(PermissionLevel level){
+		switch(level){
+		
+		case BANNED:
+			return 0;
+		case GUEST:
+			return 10;
+		case MEMBER:
+			return 20;
+		case MOD:
+			return 30;
+		case ADMIN:
+			return 40;
+		case SUPERADMIN:
+			return 50;
+		case KIRIK:
+			return 60;
+		default:
+			return 10;
+		}
 	}
 }

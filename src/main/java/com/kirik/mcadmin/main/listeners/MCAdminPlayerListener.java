@@ -22,8 +22,9 @@ public class MCAdminPlayerListener extends BaseListener {
 		event.setJoinMessage(ChatColor.DARK_GREEN + "[+]" + plugin.playerHelper.getPlayerPrefix(player).substring(0,2).replace('&', '\u00a7') + " " + player.getDisplayName() + ChatColor.YELLOW + " connected!");
 		//MOTD
 		//TODO Make this go to a file
-		plugin.playerHelper.sendDirectedMessage(player, "Welcome!");
-		plugin.playerHelper.sendDirectedMessage(player, "This is the message of the day!");
+		plugin.playerHelper.sendDirectedMessage(player, plugin.getConfig().getString("motd").replaceAll("%p", player.getName()));
+		/*plugin.playerHelper.sendDirectedMessage(player, "Welcome!");
+		plugin.playerHelper.sendDirectedMessage(player, "This is the message of the day!");*/
 	}
 	
 	@EventHandler

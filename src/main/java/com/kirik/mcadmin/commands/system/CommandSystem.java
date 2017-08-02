@@ -25,8 +25,8 @@ public class CommandSystem {
 	public void scanCommands() {
 		commands.clear();
 		scanCommands("com.kirik.mcadmin.chat");
-		scanCommands("com.kirik.mcadmin.core");
 		scanCommands("com.kirik.mcadmin.permissions");
+		scanCommands("com.kirik.mcadmin.main");
 	}
 
 	public void scanCommands(String packageName) {

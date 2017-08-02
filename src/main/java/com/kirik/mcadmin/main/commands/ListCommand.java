@@ -1,4 +1,4 @@
-package com.kirik.mcadmin.core.commands;
+package com.kirik.mcadmin.main.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

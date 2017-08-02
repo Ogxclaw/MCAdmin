@@ -1,14 +1,11 @@
 package com.kirik.mcadmin.main.offlinebukkit;
 
-import java.io.File;
 import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
-
-import com.kirik.mcadmin.core.util.PlayerHelper;
 
 public class OfflinePlayer extends AbstractPlayer {
 	
@@ -32,15 +29,15 @@ public class OfflinePlayer extends AbstractPlayer {
 	public OfflinePlayer(Server server, UUID uuid, String name){
 		super((CraftServer)server, uuid, name);
 		
-		File playerFile = PlayerHelper.getPlayerFile(this.getUniqueId(), "world");
+		//File playerFile = PlayerHelper.getPlayerFile(this.getUniqueId(), "world");
 		
 		world = server.getWorld("world"); //default val
 		location = world.getSpawnLocation(); //default val
 		
 		//MCAdmin.instance.playerHelper.setPlayerDisplayName(this);
 		
-		if(playerFile == null || !playerFile.exists())
-			return;
+		/*if(playerFile == null || !playerFile.exists())
+			return;*/
 		
 	}
 

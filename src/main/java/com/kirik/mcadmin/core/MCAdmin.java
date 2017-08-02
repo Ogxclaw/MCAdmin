@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.kirik.mcadmin.commands.system.CommandSystem;
 import com.kirik.mcadmin.componentsystem.ComponentSystem;
+import com.kirik.mcadmin.config.Configuration;
 import com.kirik.mcadmin.core.util.PlayerHelper;
 import com.kirik.mcadmin.main.StateContainer;
 import com.kirik.mcadmin.main.listeners.MCAdminPlayerListener;
@@ -22,6 +23,8 @@ public class MCAdmin extends JavaPlugin {
 	public PlayerHelper playerHelper;
 	public CommandSystem commandSystem;
 	public ComponentSystem componentSystem = new ComponentSystem();
+	
+	public Configuration config;
 	
 	private MCAdminPlayerListener listener;
 	
@@ -40,20 +43,21 @@ public class MCAdmin extends JavaPlugin {
 		
 		StateContainer.loadAll();
 		
-		commandSystem = new CommandSystem(this);
-		componentSystem.registerCommands();
-		logToConsole("Commands loaded.");
+		config = new Configuration(this);
+		config.init();
+		logToConsole("Configuration loaded.");
+		
+		setupPermissions();
+		setupChat();
+		logToConsole("Vault Hooked.");
 		
 		new MCAdminPlayerListener();
 		componentSystem.registerListeners();
 		logToConsole("Listeners loaded.");
 		
-		setupPermissions();
-		setupChat();
-		logToConsole("Vault Hooked.");
-		//logToConsole("Config files loaded.");
-		//BaseCommand.registerCommands();
-
+		commandSystem = new CommandSystem(this);
+		componentSystem.registerCommands();
+		logToConsole("Commands loaded.");
 	}
 	
 	private boolean setupPermissions(){
@@ -78,6 +82,7 @@ public class MCAdmin extends JavaPlugin {
 	
 	@Override
 	public void onDisable(){
+		saveConfig();
 		log("[MCAdmin] Shutting down...");
 	}
 	
@@ -87,6 +92,10 @@ public class MCAdmin extends JavaPlugin {
 	
 	public void logToConsole(String msg){
 		ColouredConsoleSender.getInstance().sendMessage(ChatColor.DARK_PURPLE + "[MCAdmin] " + ChatColor.WHITE + msg);
+	}
+	
+	public void logErrorToConsole(String msg){
+		ColouredConsoleSender.getInstance().sendMessage(ChatColor.DARK_RED + "[MCAdmin] " + ChatColor.WHITE + msg);
 	}
 	
 	public void log(Level level, String msg){
