@@ -27,14 +27,14 @@ public class SetTagCommand extends ICommand {
 		
 		Player targetPlayer = playerHelper.matchPlayerSingle(args[0]);
 		
-		String newNick = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
-		if(newNick.equals("none")){
-			playerHelper.setPlayerPrefix(targetPlayer, null);
+		String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
+		if(tag.equals("none")){
+			playerHelper.setPlayerSuffix(targetPlayer, "");
 			playerHelper.sendServerMessage(commandSender.getName() + " reset the tag of " + targetName + "\u00a7f!");
 			
 		}else{
-			playerHelper.setPlayerPrefix(targetPlayer, newNick + " ");
-			playerHelper.sendServerMessage(commandSender.getName() + " set tag of " + targetName + " to " + newNick + "\u00a7f!");
+			playerHelper.setPlayerSuffix(targetPlayer, " " + tag);
+			playerHelper.sendServerMessage(commandSender.getName() + " set tag of " + targetName + " to " + tag + "\u00a7f!");
 		}
 	}
 	

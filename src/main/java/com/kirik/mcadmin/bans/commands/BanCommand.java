@@ -12,6 +12,7 @@ import com.kirik.mcadmin.commands.system.ICommand.Names;
 import com.kirik.mcadmin.commands.system.ICommand.Permission;
 import com.kirik.mcadmin.commands.system.ICommand.StringFlags;
 import com.kirik.mcadmin.commands.system.ICommand.Usage;
+import com.kirik.mcadmin.config.UUIDConfiguration;
 import com.kirik.mcadmin.core.MCAdmin;
 import com.kirik.mcadmin.core.util.Utils;
 import com.kirik.mcadmin.main.MCAdminCommandException;
@@ -22,10 +23,11 @@ import com.kirik.mcadmin.main.PermissionDeniedException;
 		"Flags: \n" +
 		" -j to unjail the player first (TODO) \n" +
 		" -r to rollback the player \n" + 
+		" -o to ban an offline player \n" + 
 		" -t <time> to issue a temporary ban. Possible suffixes: \n" +
 		"	m=minutes, h=hours, d=days")
 @Usage("[<flags>] <name> [reason]")
-@BooleanFlags("jr")
+@BooleanFlags("or")
 @StringFlags("t")
 @Permission("mcadmin.users.ban")
 public class BanCommand extends ICommand {
@@ -35,24 +37,23 @@ public class BanCommand extends ICommand {
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws MCAdminCommandException {
 		args = parseFlags(args);
-		executeBan(commandSender, args[0], Utils.concatArray(args, 1, null), plugin, booleanFlags.contains('j'), booleanFlags.contains('r'), stringFlags.get('t'));
+		if(!booleanFlags.contains('o'))
+			executeBan(commandSender, args[0], Utils.concatArray(args, 1, null), plugin, booleanFlags.contains('r'), stringFlags.get('t'));
+		else
+			executeOfflineBan(commandSender, args[0], Utils.concatArray(args, 1, null), plugin, booleanFlags.contains('r'), stringFlags.get('t'));
 	}
 	
-	public static void executeBan(CommandSender commandSender, String playerName, String reason, MCAdmin plugin, boolean unjail, boolean rollback, final String duration) throws MCAdminCommandException {
+	public static void executeBan(CommandSender commandSender, String playerName, String reason, MCAdmin plugin, boolean rollback, final String duration) throws MCAdminCommandException {
 		if(!commandSender.hasPermission("mcadmin.users.ban"))
 			throw new PermissionDeniedException();
 		
-		final Player target = plugin.playerHelper.matchPlayerSingle(playerName, false);
+		Player target = plugin.playerHelper.matchPlayerSingle(playerName, false);
 		
 		if(plugin.playerHelper.getPlayerLevel((Player)commandSender) <= plugin.playerHelper.getPlayerLevel(target))
 			throw new PermissionDeniedException();
 		
-		if(unjail){
-			//TODO
-		}
-		
 		if(rollback){
-			asPlayer(commandSender).chat("/co rollback u:" + target.getName() + " t:100d");
+			asPlayer(commandSender).chat("/co rollback u:" + target.getName() + " r:-1 t:100d");
 		}
 		
 		if(reason == null){
@@ -81,7 +82,25 @@ public class BanCommand extends ICommand {
 			
 			bans.ban(commandSender, target, reason, type);
 		}
-		
+	
 		KickCommand.kickPlayer(commandSender, target, reason);
+	}
+	
+	public static void executeOfflineBan(CommandSender commandSender, String playerName, String reason, MCAdmin plugin, boolean rollback, final String duration) throws MCAdminCommandException {
+		if(!commandSender.hasPermission("mcadmin.users.ban"))
+			throw new PermissionDeniedException();
+		
+		UUIDConfiguration uuidConfig = new UUIDConfiguration();
+		String uuid = uuidConfig.getUUIDConfig().getString(playerName.toLowerCase() + ".uuid");
+		
+		if(reason == null){
+			reason = "Banned by " + commandSender.getName();
+		}
+		
+		if(rollback){
+			asPlayer(commandSender).chat("/co rollback u:" + playerName + " r:-1 t:100d");
+		}
+		
+		bans.offlineBan(commandSender, playerName, uuid, reason, BanType.PERMANENT);
 	}
 }

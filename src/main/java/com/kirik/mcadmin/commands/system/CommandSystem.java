@@ -29,6 +29,7 @@ public class CommandSystem {
 		scanCommands("com.kirik.mcadmin.main");
 		scanCommands("com.kirik.mcadmin.bans");
 		scanCommands("com.kirik.mcadmin.jail");
+		scanCommands("com.kirik.mcadmin.factions");
 	}
 
 	public void scanCommands(String packageName) {

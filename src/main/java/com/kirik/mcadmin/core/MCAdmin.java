@@ -2,6 +2,7 @@ package com.kirik.mcadmin.core;
 
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
@@ -13,9 +14,11 @@ import com.kirik.mcadmin.commands.system.CommandSystem;
 import com.kirik.mcadmin.componentsystem.ComponentSystem;
 import com.kirik.mcadmin.config.BansConfiguration;
 import com.kirik.mcadmin.core.util.PlayerHelper;
+import com.kirik.mcadmin.factions.listeners.FactionsHookListener;
 import com.kirik.mcadmin.main.StateContainer;
 import com.kirik.mcadmin.main.console.MCAdminConsoleCommands;
 import com.kirik.mcadmin.main.listeners.MCAdminPlayerListener;
+import com.massivecraft.factions.Factions;
 
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
@@ -35,6 +38,9 @@ public class MCAdmin extends JavaPlugin {
 	public Permission permission = null;
 	public Chat chat = null;
 	
+	//FACTIONS
+	private Factions fac;
+	
 	public MCAdmin(){
 		instance = this;
 		componentSystem.registerComponents();
@@ -43,6 +49,8 @@ public class MCAdmin extends JavaPlugin {
 	@Override
 	public void onEnable(){
 		playerHelper = new PlayerHelper(this);
+		
+		checkPlugins();
 		
 		StateContainer.loadAll();
 		
@@ -55,6 +63,7 @@ public class MCAdmin extends JavaPlugin {
 		setupChat();
 		logToConsole("Vault Hooked.");
 		
+		new FactionsHookListener();
 		new MCAdminPlayerListener();
 		componentSystem.registerListeners();
 		logToConsole("Listeners loaded.");
@@ -64,6 +73,15 @@ public class MCAdmin extends JavaPlugin {
 		logToConsole("Commands loaded.");
 		
 		new MCAdminConsoleCommands(this);
+	}
+	
+	public void checkPlugins(){
+		if(Bukkit.getPluginManager().getPlugin("Factions") != null){
+			this.fac = (Factions)Bukkit.getPluginManager().getPlugin("Factions");
+			logToConsole("Factions Hooked");
+		}else{
+			logErrorToConsole("Factions did not load!");
+		}
 	}
 	
 	private boolean setupPermissions(){

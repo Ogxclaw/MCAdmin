@@ -13,6 +13,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.kirik.mcadmin.config.PlayerConfiguration;
+import com.kirik.mcadmin.config.UUIDConfiguration;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.MPlayer;
 
 public class MCAdminPlayerListener extends BaseListener {
 	
@@ -32,6 +35,13 @@ public class MCAdminPlayerListener extends BaseListener {
 		config.createPlayerDefaults();
 		config.savePlayerConfig();
 		plugin.logToConsole("Config loaded for player " + player.getName());
+		
+		UUIDConfiguration uuidConfig = new UUIDConfiguration();
+		uuidConfig.createUUIDConfig();
+		uuidConfig.createUUIDDefaults();
+		uuidConfig.getUUIDConfig().set(player.getName().toLowerCase() + ".uuid", player.getUniqueId().toString());
+		uuidConfig.saveUUIDConfig();
+		plugin.logToConsole("UUID logged for player " + player.getName());
 		
 		if(plugin.permission.getPlayerGroups(player) == null){
 			playerHelper.setPlayerRank(player, "member"); //TODO find default group / set it manually.
@@ -64,15 +74,22 @@ public class MCAdminPlayerListener extends BaseListener {
 		event.setLeaveMessage(ChatColor.DARK_RED + "[-]" + plugin.playerHelper.getPlayerPrefix(player).substring(0,2).replace('&', '\u00a7') + " " + player.getDisplayName() + ChatColor.YELLOW + " was kicked! ((" + event.getReason() + "))");
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerChat(AsyncPlayerChatEvent event){
 		//TODO Just make a big ass hook class you fucking imbred.
 		Player player = event.getPlayer();
-		if(plugin.playerHelper.getPersonalPlayerPrefix(player) != null){
-			event.setFormat(plugin.playerHelper.getPersonalPlayerPrefix(player) + /*" " +*/ player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage());
+		//TODO Factions integration
+		MPlayer mPlayer = MPlayer.get(player.getUniqueId());
+		Faction faction = mPlayer.getFaction();
+		/*if(plugin.playerHelper.getPersonalPlayerPrefix(player) != null){
+			event.setFormat(plugin.playerHelper.getPersonalPlayerPrefix(player).replace('&', '\u00a7') + " " + player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
+		}else{*/
+		if(!mPlayer.hasFaction()){
+			event.setFormat(plugin.playerHelper.getPlayerPrefix(player).replace('&', '\u00a7') + /*" " +*/ player.getDisplayName() + playerHelper.getPersonalPlayerSuffix(player) + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
 		}else{
-			event.setFormat(plugin.playerHelper.getPlayerPrefix(player) + /*" " +*/ player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage());
+			event.setFormat(ChatColor.GOLD + faction.getName() + " " + ChatColor.RESET + plugin.playerHelper.getPlayerPrefix(player).replace('&', '\u00a7') + /*" " +*/ player.getDisplayName() + playerHelper.getPersonalPlayerSuffix(player) + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
 		}
+		//}
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

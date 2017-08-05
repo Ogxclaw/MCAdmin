@@ -120,6 +120,18 @@ public class PlayerHelper extends StateContainer {
 		plugin.chat.setPlayerPrefix(player, prefix);
 	}
 	
+	public void setPlayerSuffix(Player player, String suffix){
+		plugin.chat.setPlayerSuffix(player, suffix);
+	}
+	
+	public String getPlayerSuffix(Player player){
+		return plugin.chat.getGroupSuffix(player.getWorld(), this.getPlayerRank(player));
+	}
+	
+	public String getPersonalPlayerSuffix(Player player){
+		return plugin.chat.getPlayerSuffix(player);
+	}
+	
 	//ranks
 	public String getPlayerRank(Player player){
 		return plugin.permission.getPrimaryGroup(player);

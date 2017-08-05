@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.kirik.mcadmin.bans.listeners.BansPlayerListener;
 import com.kirik.mcadmin.config.BansConfiguration;
+import com.kirik.mcadmin.config.UUIDConfiguration;
 import com.kirik.mcadmin.core.MCAdmin;
 import com.kirik.mcadmin.main.offlinebukkit.OfflinePlayer;
 
@@ -42,6 +43,19 @@ public class Bans {
 		ban(from, plyName, plyUUID, ip, reason, type, 0, "");
 	}
 	
+	public void offlineBan(final CommandSender from, final String playerName, final String UUID, final String reason, final BanType type){
+		UUIDConfiguration uuidConfig = new UUIDConfiguration();
+		String uuid = uuidConfig.getUUIDConfig().getString(playerName.toLowerCase() + ".uuid");
+		
+		BansConfiguration bans = new BansConfiguration();
+		bans.getBansConfig().set(uuid + ".name", playerName);
+		bans.getBansConfig().set(uuid + ".isBanned", true);
+		bans.getBansConfig().set(uuid + ".reason", reason);
+		bans.saveBansConfig();
+		
+		plugin.playerHelper.sendServerMessage(from.getName() + " banned " + playerName + " [Reason: " + reason + "]");
+	}
+	
 	public void ban(final CommandSender from, final String _playerName, final UUID playerUUID, final String ip, final String reason, final BanType type, final long duration, final String measure){
 		if(type == null)
 			return;
@@ -60,6 +74,7 @@ public class Bans {
 		bans.getBansConfig().set(playerUUID.toString() + ".reason", reason);
 		bans.saveBansConfig();
 		
+		plugin.playerHelper.sendServerMessage(from.getName() + " banned " + playerName + " [Reason: " + reason + "]");
 		/*new Thread(){
 			public void run(){
 				Ban newBan = new Ban();

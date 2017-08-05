@@ -36,7 +36,7 @@ public class WhoCommand extends ICommand {
 		
 		playerHelper.sendDirectedMessage(commandSender, "Name: " + target.getName());
 		playerHelper.sendDirectedMessage(commandSender, "Rank: " + playerHelper.getPlayerRank(target));
-		playerHelper.sendDirectedMessage(commandSender, "NameTag: " + playerHelper.getPersonalPlayerPrefix(target));
+		playerHelper.sendDirectedMessage(commandSender, "NameTag: " + playerHelper.getPersonalPlayerSuffix(target));
 		playerHelper.sendDirectedMessage(commandSender, "World: " + target.getWorld().getName());
 		
 		final int playerLevel = playerHelper.getPlayerLevel((Player)commandSender);
