@@ -2,29 +2,32 @@ package com.kirik.mcadmin.core;
 
 import java.util.logging.Level;
 
+import org.bukkit.World;
+import org.bukkit.World.Environment;
+import org.bukkit.WorldCreator;
 import org.bukkit.craftbukkit.v1_12_R1.command.ColouredConsoleSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.kirik.mcadmin.commands.system.CommandSystem;
 import com.kirik.mcadmin.componentsystem.ComponentSystem;
-import com.kirik.mcadmin.config.Configuration;
+import com.kirik.mcadmin.config.BansConfiguration;
 import com.kirik.mcadmin.core.util.PlayerHelper;
 import com.kirik.mcadmin.main.StateContainer;
+import com.kirik.mcadmin.main.console.MCAdminConsoleCommands;
 import com.kirik.mcadmin.main.listeners.MCAdminPlayerListener;
 
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 
+//TODO Refractor to [Zen] - Zenium Server Network
 public class MCAdmin extends JavaPlugin {
 	
 	public static MCAdmin instance;
 	public PlayerHelper playerHelper;
 	public CommandSystem commandSystem;
 	public ComponentSystem componentSystem = new ComponentSystem();
-	
-	public Configuration config;
 	
 	private MCAdminPlayerListener listener;
 	
@@ -43,9 +46,10 @@ public class MCAdmin extends JavaPlugin {
 		
 		StateContainer.loadAll();
 		
-		config = new Configuration(this);
-		config.init();
-		logToConsole("Configuration loaded.");
+		BansConfiguration bans = new BansConfiguration();
+		bans.createBansConfig();
+		bans.createBansDefaults();
+		bans.saveBansConfig();
 		
 		setupPermissions();
 		setupChat();
@@ -58,6 +62,8 @@ public class MCAdmin extends JavaPlugin {
 		commandSystem = new CommandSystem(this);
 		componentSystem.registerCommands();
 		logToConsole("Commands loaded.");
+		
+		new MCAdminConsoleCommands(this);
 	}
 	
 	private boolean setupPermissions(){
@@ -100,6 +106,14 @@ public class MCAdmin extends JavaPlugin {
 	
 	public void log(Level level, String msg){
 		getLogger().log(level, msg);
+	}
+	
+	public World getOrCreateWorld(String name, Environment env){
+		name = name.toLowerCase();
+		World world = getServer().getWorld(name);
+		if(world == null)
+			return  getServer().createWorld(WorldCreator.name(name).environment(env));
+		return world;
 	}
 
 }

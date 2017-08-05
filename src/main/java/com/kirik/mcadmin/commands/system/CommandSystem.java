@@ -27,6 +27,8 @@ public class CommandSystem {
 		scanCommands("com.kirik.mcadmin.chat");
 		scanCommands("com.kirik.mcadmin.permissions");
 		scanCommands("com.kirik.mcadmin.main");
+		scanCommands("com.kirik.mcadmin.bans");
+		scanCommands("com.kirik.mcadmin.jail");
 	}
 
 	public void scanCommands(String packageName) {
@@ -73,13 +75,13 @@ public class CommandSystem {
 					throw new PermissionDeniedException();
 				if (needsLogging(commandSender, icmd)) {
 					String logmsg = "MCAdmin Command: " + playerName + ": " + cmd + " " + argStr;
-					plugin.log(logmsg);
+					plugin.logToConsole(logmsg);
 				}
 				
 				icmd.run(commandSender, args, argStr, cmd);
 			} catch (PermissionDeniedException e) {
 				String logmsg = "MCAdmin Command denied: " + playerName + ": " + cmd + " " + argStr;
-				plugin.log(logmsg);
+				plugin.logErrorToConsole(logmsg);
 
 				PlayerHelper.sendDirectedMessage(commandSender, e.getMessage(), e.getColor());
 			} catch (MCAdminCommandException e) {

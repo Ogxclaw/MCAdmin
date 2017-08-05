@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
@@ -18,8 +19,30 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+
+import com.kirik.mcadmin.core.MCAdmin;
 
 public class Utils {
+	
+	private MCAdmin plugin;
+	
+	public Utils(MCAdmin plugin){
+		this.plugin = plugin;
+	}
+	
+	public static UUID CONSOLE_UUID = UUID.nameUUIDFromBytes("[CONSOLE]".getBytes());
+	
+	public static UUID getCommandSenderUUID(CommandSender commandSender){
+		if(commandSender instanceof Player)
+			return ((Player)commandSender).getUniqueId();
+		if(commandSender instanceof ConsoleCommandSender)
+			return CONSOLE_UUID;
+		return UUID.nameUUIDFromBytes(("[CSUUID:" + commandSender.getClass().getName() + "]").getBytes());
+	}
 	
 	public static String concatArray(String[] array, int start, String def){
 		if(array.length <= start)
@@ -221,6 +244,39 @@ public class Utils {
 			}
 		}
 		return sb.toString();
+	}
+	
+	public static double vectorToYaw(Vector offset){
+		return Math.toDegrees(Math.atan2(-offset.getX(), offset.getZ()));
+	}
+	
+	static String[] directions = { "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW" };
+	public static String yawToDirection(double yaw){
+		yaw = (yaw % 360 + 630) % 360;
+		
+		int intdeg = (int) Math.round(yaw / 22.5F);
+		if(intdeg < 0)
+			intdeg += 16;
+		if(intdeg >= 16)
+			intdeg -= 16;
+		
+		return directions[intdeg];
+	}
+	
+	public static StringBuilder enumerateStrings(final List<String> strings){
+		final StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < strings.size(); ++i){
+			final String distance = strings.get(i);
+			if(i == 0) {
+				//nothing
+			}else if(i == strings.size() - 1){
+				sb.append(" and ");
+			}else{
+				sb.append(", ");
+			}
+			sb.append(distance);
+		}
+		return sb;
 	}
 
 }

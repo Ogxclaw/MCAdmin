@@ -21,6 +21,8 @@ import gnu.trove.set.hash.TCharHashSet;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 
 public abstract class ICommand {
+	
+	
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Names {
 		String[] value();
@@ -297,13 +299,12 @@ public abstract class ICommand {
 		if (requiredPermission != null)
 			return commandSender.hasPermission(requiredPermission);
 		
-		return true;
+		/*return true;*/
 
-		// TODO FIX
-		// final int playerLevel = PlayerHelper.getPlayerLevel(commandSender);
-		//final int requiredLevel = getRequiredLevel();
+		final int playerLevel = playerHelper.getPlayerLevel((Player)commandSender);
+		final int requiredLevel = getRequiredLevel();
 
-		// return playerLevel >= requiredLevel;
+		return playerLevel >= requiredLevel;
 	}
 
 	public String[] getNames() {

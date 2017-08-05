@@ -30,12 +30,20 @@ public class SetRankCommand extends ICommand {
 		
 		String rank = args[1];
 		String[] groups = plugin.permission.getGroups();
+		
+		int targetPlayerLevel = playerHelper.getPlayerLevel(targetPlayer);
+		int commandSenderLevel = playerHelper.getPlayerLevel((Player)commandSender);
 		//playerHelper.setPlayerPrefix(targetPlayer, newNick + " ");
+		if(commandSenderLevel <= playerHelper.getLevelOfRank(rank)){
+			throw new MCAdminCommandException("You cannot set a player to the rank of \"" + rank + "\"!");
+		}
+		if(commandSenderLevel <= targetPlayerLevel){
+			throw new MCAdminCommandException("You are not able to set the rank of " + targetName + " to \"" + rank + "\"!");
+		}
 		if(Arrays.asList(groups).contains(rank)){
-			plugin.permission.playerRemoveGroup(targetPlayer, plugin.playerHelper.getPlayerRank(targetPlayer));
-			plugin.permission.playerAddGroup(targetPlayer, rank);
+			playerHelper.setPlayerRank(targetPlayer, rank);
 		}else{
-			throw new MCAdminCommandException("Rank " + rank + " not found!");
+			throw new MCAdminCommandException("Rank \"" + rank + "\" not found!");
 		}
 		
 		playerHelper.sendServerMessage(commandSender.getName() + " set rank of " + targetName + " to " + rank + "\u00a7f!");
