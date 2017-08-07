@@ -117,7 +117,7 @@ public abstract class AbstractPlayer extends CraftOfflinePlayer implements Playe
 		return blocks;
 	}
 
-	@Override
+	/*@Override
 	public Block getTargetBlock(HashSet<Byte> transparent, int maxDistance) {
 		List<Block> blocks = getLineOfSight(transparent, maxDistance, 1);
 		return blocks.get(0);
@@ -126,7 +126,7 @@ public abstract class AbstractPlayer extends CraftOfflinePlayer implements Playe
 	@Override
 	public List<Block> getLastTwoTargetBlocks(HashSet<Byte> transparent, int maxDistance) {
 		return getLineOfSight(transparent, maxDistance, 2);
-	}
+	}*/
 
 	@Override
 	public Location getLocation(Location location) {

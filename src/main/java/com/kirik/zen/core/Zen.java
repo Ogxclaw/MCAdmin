@@ -1,11 +1,12 @@
 package com.kirik.zen.core;
 
+import java.util.Date;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.command.ColouredConsoleSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.kirik.zen.commands.system.CommandSystem;
 import com.kirik.zen.componentsystem.ComponentSystem;
 import com.kirik.zen.config.BansConfiguration;
+import com.kirik.zen.config.UUIDConfiguration;
 import com.kirik.zen.core.util.PlayerHelper;
 import com.kirik.zen.factions.listeners.FactionsHookListener;
 import com.kirik.zen.main.StateContainer;
@@ -24,7 +26,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 
-//TODO Refractor to [Zen] - Zenium Server Network
+//Zenium Server Network
 public class Zen extends JavaPlugin {
 	
 	public static Zen instance;
@@ -34,12 +36,17 @@ public class Zen extends JavaPlugin {
 	
 	private ZenPlayerListener listener;
 	
+	private BansConfiguration bansConfig;
+	private UUIDConfiguration uuidConfig;
+	
 	//VAULT
 	public Permission permission = null;
 	public Chat chat = null;
 	
 	//FACTIONS
-	private Factions fac;
+	public Factions factions = null;
+	
+	//public Date currentDate;
 	
 	public Zen(){
 		instance = this;
@@ -48,16 +55,26 @@ public class Zen extends JavaPlugin {
 	
 	@Override
 	public void onEnable(){
+		//currentDate = new Date(System.currentTimeMillis());
+		
 		playerHelper = new PlayerHelper(this);
 		
-		checkPlugins();
+		//checkPlugins();
 		
 		StateContainer.loadAll();
 		
-		BansConfiguration bans = new BansConfiguration();
-		bans.createBansConfig();
-		bans.createBansDefaults();
-		bans.saveBansConfig();
+		bansConfig = new BansConfiguration();
+		bansConfig.createBansConfig();
+		bansConfig.createBansDefaults();
+		this.saveBansConfig();
+		
+		uuidConfig = new UUIDConfiguration();
+		uuidConfig.createUUIDConfig();
+		uuidConfig.createUUIDDefaults();
+		this.saveUUIDConfig();
+		
+		setupFactions();
+		logToConsole("Factions Hooked.");
 		
 		setupPermissions();
 		setupChat();
@@ -75,13 +92,18 @@ public class Zen extends JavaPlugin {
 		new ZenConsoleCommands(this);
 	}
 	
-	public void checkPlugins(){
-		if(Bukkit.getPluginManager().getPlugin("Factions") != null){
-			this.fac = (Factions)Bukkit.getPluginManager().getPlugin("Factions");
-			logToConsole("Factions Hooked");
-		}else{
-			logErrorToConsole("Factions did not load!");
+	//TODO Add worldedit so I can add jails
+	
+	//TODO jail, setjail, servertime, kickall, lockdown, unban, alt tracking, mute, muteall, butcher, clear, compass, fullbright, gamemode, leash, rage, speed
+	//TODO advertisement, at, autoexec, bind, console, exec, god, heal, reloadconfig, rescan, restart, give, particle, spawnat, throw, teleport, back, noport, nosummon, notp,
+	//TODO send, summon, tp, transmute, warp, setwarp, banish, setspawn, spawn, pm, custom scoreboard?, kits, buycraft
+	
+	private boolean setupFactions(){
+		RegisteredServiceProvider<Factions> factionsProvider = getServer().getServicesManager().getRegistration(com.massivecraft.factions.Factions.class);
+		if(factionsProvider != null){
+			factions = factionsProvider.getProvider();
 		}
+		return (factions != null);
 	}
 	
 	private boolean setupPermissions(){
@@ -99,6 +121,25 @@ public class Zen extends JavaPlugin {
         }
         return (chat != null);
 	}
+	
+	//START CONFIGS
+	public FileConfiguration getBansConfig(){
+		return bansConfig.getBansConfig();
+	}
+	
+	public void saveBansConfig(){
+		bansConfig.saveBansConfig();
+	}
+	
+	public FileConfiguration getUUIDConfig(){
+		return uuidConfig.getUUIDConfig();
+	}
+	
+	public void saveUUIDConfig(){
+		uuidConfig.saveUUIDConfig();
+	}
+	
+	//END CONFIGS
 	
 	public ZenPlayerListener getPlayerListener(){
 		return listener;

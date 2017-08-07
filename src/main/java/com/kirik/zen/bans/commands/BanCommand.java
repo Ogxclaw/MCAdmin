@@ -15,8 +15,8 @@ import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.config.UUIDConfiguration;
 import com.kirik.zen.core.Zen;
 import com.kirik.zen.core.util.Utils;
-import com.kirik.zen.main.ZenCommandException;
 import com.kirik.zen.main.PermissionDeniedException;
+import com.kirik.zen.main.ZenCommandException;
 
 @Names("ban")
 @Help("Bans specified user. Specify offline players in quotation marks. \n" + 
@@ -67,16 +67,7 @@ public class BanCommand extends ICommand {
 			if(duration.length() < 2)
 				throw new ZenCommandException("Malformed ban duration");
 			
-			final String measure = duration.substring(duration.length() - 1);
-			
-			final long durationValue;
-			try {
-				durationValue = Long.parseLong(duration.substring(0, duration.length() - 2).trim());
-			}catch(NumberFormatException e){
-				throw new ZenCommandException("Malformed ban duration");
-			}
-			
-			bans.ban(commandSender, target, reason, type, durationValue, measure);
+			bans.ban(commandSender, target, reason, type, duration);
 		}else{
 			type = BanType.PERMANENT;
 			
@@ -101,6 +92,18 @@ public class BanCommand extends ICommand {
 			asPlayer(commandSender).chat("/co rollback u:" + playerName + " r:-1 t:100d");
 		}
 		
-		bans.offlineBan(commandSender, playerName, uuid, reason, BanType.PERMANENT);
+		final BanType type;
+		if(duration != null){
+			type = BanType.TEMPORARY;
+			
+			if(duration.length() < 2)
+				throw new ZenCommandException("Malformed ban duration");
+			
+			bans.offlineBan(commandSender, playerName, uuid, reason, type, duration);
+		}else{
+			type = BanType.PERMANENT;
+			
+			bans.offlineBan(commandSender, playerName, uuid, reason, type, "");
+		}
 	}
 }

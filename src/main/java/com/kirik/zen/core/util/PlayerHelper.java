@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.kirik.zen.bans.BanType;
 import com.kirik.zen.config.PlayerConfiguration;
 import com.kirik.zen.core.Zen;
 import com.kirik.zen.main.StateContainer;
@@ -29,6 +30,10 @@ public class PlayerHelper extends StateContainer {
 			if(p.getUniqueId().equals(uuid))
 				return p;
 		throw new IllegalArgumentException();
+	}
+	
+	public String getUUIDfromPlayer(String playerName){
+		return plugin.getUUIDConfig().getString(playerName + ".uuid");
 	}
 	
 	private Player literalMatch(String name){
@@ -225,5 +230,39 @@ public class PlayerHelper extends StateContainer {
 	public boolean isFrozen(Player player){
 		PlayerConfiguration config = new PlayerConfiguration(player.getUniqueId());
 		return config.getPlayerConfig().getBoolean("frozen");
+	}
+	
+	//bans
+	public boolean isBanned(String uuid){	
+		return plugin.getBansConfig().getBoolean(uuid + ".isBanned");
+	}
+	
+	public void banPlayer(String uuid){
+		plugin.getBansConfig().set(uuid + ".isBanned", true);
+		plugin.saveBansConfig();
+	}
+	
+	public String getBanReason(String uuid){
+		return plugin.getBansConfig().getString(uuid + ".reason");
+	}
+	
+	public void setBanReason(String uuid, String reason){
+		plugin.getBansConfig().set(uuid + ".reason", reason);
+		plugin.saveBansConfig();
+	}
+	
+	public void unbanPlayer(String uuid){
+		plugin.getBansConfig().set(uuid + ".isBanned", false);
+		plugin.saveBansConfig();
+	}
+	
+	public void setUnbanDate(String uuid, int date){
+		plugin.getBansConfig().set(uuid + ".unbanDate", date);
+		plugin.saveBansConfig();
+	}
+	
+	public void setBanType(String uuid, BanType type){
+		plugin.getBansConfig().set(uuid + ".banType", type.getName());
+		plugin.saveBansConfig();
 	}
 }
