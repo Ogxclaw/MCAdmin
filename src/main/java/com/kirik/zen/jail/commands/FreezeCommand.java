@@ -1,5 +1,6 @@
 package com.kirik.zen.jail.commands;
 
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -8,8 +9,8 @@ import com.kirik.zen.commands.system.ICommand.Help;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
 import com.kirik.zen.commands.system.ICommand.Usage;
-import com.kirik.zen.main.ZenCommandException;
 import com.kirik.zen.main.PermissionDeniedException;
+import com.kirik.zen.main.ZenCommandException;
 
 @Names("freeze")
 @Help("Freezes/Unfreezes a player")

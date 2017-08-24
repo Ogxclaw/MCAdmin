@@ -12,7 +12,7 @@ import com.kirik.zen.commands.system.ICommand.Permission;
 import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.main.ZenCommandException;
 
-@Names("zenhelp")
+@Names({"zen", "zenhelp"})
 @Help("Prints a list of available commands or information about the specified command.")
 @Usage("[<command>]")
 @Permission("zen.help")

@@ -9,9 +9,6 @@ import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 
 public class OfflinePlayer extends AbstractPlayer {
 	
-	//TODO I hate this file with a passion
-	private Location location;
-	private String displayname;
 	private World world;
 	
 	public OfflinePlayer(Server server, String name){
@@ -32,7 +29,7 @@ public class OfflinePlayer extends AbstractPlayer {
 		//File playerFile = PlayerHelper.getPlayerFile(this.getUniqueId(), "world");
 		
 		world = server.getWorld("world"); //default val
-		location = world.getSpawnLocation(); //default val
+		world.getSpawnLocation();
 		
 		//MCAdmin.instance.playerHelper.setPlayerDisplayName(this);
 		

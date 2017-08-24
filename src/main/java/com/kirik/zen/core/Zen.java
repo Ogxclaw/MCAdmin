@@ -1,6 +1,5 @@
 package com.kirik.zen.core;
 
-import java.util.Date;
 import java.util.logging.Level;
 
 import org.bukkit.World;
@@ -16,15 +15,17 @@ import com.kirik.zen.componentsystem.ComponentSystem;
 import com.kirik.zen.config.BansConfiguration;
 import com.kirik.zen.config.UUIDConfiguration;
 import com.kirik.zen.core.util.PlayerHelper;
-import com.kirik.zen.factions.listeners.FactionsHookListener;
 import com.kirik.zen.main.StateContainer;
 import com.kirik.zen.main.console.ZenConsoleCommands;
 import com.kirik.zen.main.listeners.ZenPlayerListener;
-import com.massivecraft.factions.Factions;
+import com.kirik.zen.vanish.Vanish;
+import com.kirik.zen.warps.WarpsConfiguration;
+import com.sk89q.worldedit.WorldEdit;
 
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
+import net.redstoneore.legacyfactions.Factions;
 
 //Zenium Server Network
 public class Zen extends JavaPlugin {
@@ -38,6 +39,9 @@ public class Zen extends JavaPlugin {
 	
 	private BansConfiguration bansConfig;
 	private UUIDConfiguration uuidConfig;
+	private WarpsConfiguration warpsConfig;
+	
+	public Vanish vanish = new Vanish(this);
 	
 	//VAULT
 	public Permission permission = null;
@@ -45,6 +49,10 @@ public class Zen extends JavaPlugin {
 	
 	//FACTIONS
 	public Factions factions = null;
+	
+	//WORLDEDIT
+	public WorldEdit worldEdit = null;
+	
 	
 	//public Date currentDate;
 	
@@ -73,6 +81,14 @@ public class Zen extends JavaPlugin {
 		uuidConfig.createUUIDDefaults();
 		this.saveUUIDConfig();
 		
+		warpsConfig = new WarpsConfiguration();
+		warpsConfig.createWarpsConfig();
+		warpsConfig.createWarpsDefaults();
+		this.saveWarpsConfig();
+		
+		setupWorldEdit();
+		logToConsole("WorldEdit Hooked.");
+		
 		setupFactions();
 		logToConsole("Factions Hooked.");
 		
@@ -80,7 +96,8 @@ public class Zen extends JavaPlugin {
 		setupChat();
 		logToConsole("Vault Hooked.");
 		
-		new FactionsHookListener();
+		//new CombatListener();
+		//new FactionsHookListener();
 		new ZenPlayerListener();
 		componentSystem.registerListeners();
 		logToConsole("Listeners loaded.");
@@ -92,14 +109,16 @@ public class Zen extends JavaPlugin {
 		new ZenConsoleCommands(this);
 	}
 	
-	//TODO Add worldedit so I can add jails
-	
-	//TODO jail, setjail, servertime, kickall, lockdown, unban, alt tracking, mute, muteall, butcher, clear, compass, fullbright, gamemode, leash, rage, speed
-	//TODO advertisement, at, autoexec, bind, console, exec, god, heal, reloadconfig, rescan, restart, give, particle, spawnat, throw, teleport, back, noport, nosummon, notp,
-	//TODO send, summon, tp, transmute, warp, setwarp, banish, setspawn, spawn, pm, custom scoreboard?, kits, buycraft
+	private boolean setupWorldEdit(){
+		RegisteredServiceProvider<WorldEdit> worldEditProvider = getServer().getServicesManager().getRegistration(com.sk89q.worldedit.WorldEdit.class);
+		if(worldEditProvider != null){
+			worldEdit = worldEditProvider.getProvider();
+		}
+		return (worldEdit != null);
+	}
 	
 	private boolean setupFactions(){
-		RegisteredServiceProvider<Factions> factionsProvider = getServer().getServicesManager().getRegistration(com.massivecraft.factions.Factions.class);
+		RegisteredServiceProvider<Factions> factionsProvider = getServer().getServicesManager().getRegistration(net.redstoneore.legacyfactions.Factions.class);
 		if(factionsProvider != null){
 			factions = factionsProvider.getProvider();
 		}
@@ -137,6 +156,14 @@ public class Zen extends JavaPlugin {
 	
 	public void saveUUIDConfig(){
 		uuidConfig.saveUUIDConfig();
+	}
+	
+	public FileConfiguration getWarpsConfig(){
+		return warpsConfig.getWarpsConfig();
+	}
+	
+	public void saveWarpsConfig(){
+		warpsConfig.saveWarpsConfig();
 	}
 	
 	//END CONFIGS

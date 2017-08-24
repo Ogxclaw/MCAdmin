@@ -1,10 +1,8 @@
 package com.kirik.zen.main.offlinebukkit;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -56,11 +54,11 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import com.mojang.authlib.GameProfile;
 
+@SuppressWarnings("deprecation")
 public abstract class AbstractPlayer extends CraftOfflinePlayer implements Player {
 	
 	public AbstractPlayer(CraftServer server, UUID uuid, String name){
@@ -89,32 +87,6 @@ public abstract class AbstractPlayer extends CraftOfflinePlayer implements Playe
 			return 1.62D;
 
 		return 1.42D;
-	}
-
-	private List<Block> getLineOfSight(HashSet<Byte> transparent, int maxDistance, int maxLength) {
-		if (maxDistance > 120) {
-			maxDistance = 120;
-		}
-		ArrayList<Block> blocks = new ArrayList<>();
-		Iterator<Block> itr = new BlockIterator(this, maxDistance);
-		while (itr.hasNext()) {
-			Block block = itr.next();
-			blocks.add(block);
-			if (maxLength != 0 && blocks.size() > maxLength) {
-				blocks.remove(0);
-			}
-			int id = block.getType().getId();
-			if (transparent == null) {
-				if (id != 0) {
-					break;
-				}
-			} else {
-				if (!transparent.contains((byte)id)) {
-					break;
-				}
-			}
-		}
-		return blocks;
 	}
 
 	/*@Override

@@ -1,6 +1,7 @@
 package com.kirik.zen.main.listeners;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Date;
 
 import org.bukkit.ChatColor;
@@ -15,8 +16,10 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.kirik.zen.config.PlayerConfiguration;
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.factions.entity.MPlayer;
+
+import net.redstoneore.legacyfactions.Relation;
+import net.redstoneore.legacyfactions.entity.FPlayer;
+import net.redstoneore.legacyfactions.entity.FPlayerColl;
 
 public class ZenPlayerListener extends BaseListener {
 	
@@ -53,7 +56,9 @@ public class ZenPlayerListener extends BaseListener {
 		}
 		//TODO Aggravating, but no better way to fix this at the moment. Unless I hard code ranks which is a big no-no
 		event.setJoinMessage(ChatColor.DARK_GREEN + "[+]" + plugin.playerHelper.getPlayerPrefix(player).replace('&', '\u00a7') + " " + player.getDisplayName() + ChatColor.YELLOW + " connected!");
-		plugin.playerHelper.sendDirectedMessage(player, plugin.getConfig().getString("motd").replaceAll("%p", player.getName()));
+		plugin.playerHelper.sendDirectedMessage(player, "Welcome to the \u00a76Zenium Server Network\u00a7f!");
+		plugin.playerHelper.sendDirectedMessage(player, "We are currently in beta, so there's much more fun to come!");
+		/*plugin.playerHelper.sendDirectedMessage(player, plugin.getConfig().getString("motd").replaceAll("%p", player.getName()));*/
 	}
 	
 	@EventHandler
@@ -63,6 +68,10 @@ public class ZenPlayerListener extends BaseListener {
 			event.setCancelled(true);
 			playerHelper.sendDirectedMessage(player, "You are frozen!");
 		}
+		/*if(playerHelper.hasPlayerTpTimer(player)){
+			playerHelper.setPlayerTpTimer(player, false);
+			playerHelper.sendDirectedMessage(player, "Teleportation cancelled!");
+		}*/
 	}
 	
 	@EventHandler
@@ -77,22 +86,64 @@ public class ZenPlayerListener extends BaseListener {
 		event.setLeaveMessage(ChatColor.DARK_RED + "[-]" + plugin.playerHelper.getPlayerPrefix(player).substring(0,2).replace('&', '\u00a7') + " " + player.getDisplayName() + ChatColor.YELLOW + " was kicked! ((" + event.getReason() + "))");
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerChat(AsyncPlayerChatEvent event){
+		ZenOnPlayerChat(event);
+		event.setCancelled(true);
+	}
+	
+	private void ZenOnPlayerChat(AsyncPlayerChatEvent event){
 		//TODO Just make a big ass hook class you fucking imbred.
 		Player player = event.getPlayer();
 		//TODO Factions integration
-		MPlayer mPlayer = MPlayer.get(player.getUniqueId());
-		Faction faction = mPlayer.getFaction();
-		/*if(plugin.playerHelper.getPersonalPlayerPrefix(player) != null){
-			event.setFormat(plugin.playerHelper.getPersonalPlayerPrefix(player).replace('&', '\u00a7') + " " + player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
-		}else{*/
-		if(!mPlayer.hasFaction()){
-			event.setFormat(plugin.playerHelper.getPlayerPrefix(player).replace('&', '\u00a7') + /*" " +*/ player.getDisplayName() + playerHelper.getPersonalPlayerSuffix(player) + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
-		}else{
-			event.setFormat(ChatColor.GOLD + faction.getName() + " " + ChatColor.RESET + plugin.playerHelper.getPlayerPrefix(player).replace('&', '\u00a7') + /*" " +*/ player.getDisplayName() + playerHelper.getPersonalPlayerSuffix(player) + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
+		FPlayer mPlayer = FPlayerColl.get(player);
+		Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
+		
+		//MUTE
+		PlayerConfiguration playerConfig = new PlayerConfiguration(player.getUniqueId());	
+		boolean isMuted = playerConfig.getPlayerConfig().getBoolean("isMuted");
+		if(isMuted){
+			playerHelper.sendDirectedMessage(player, "You are muted! You will not be heard.");
+			return;
 		}
-		//}
+		
+		
+		//OPCHAT
+		if(event.getMessage().startsWith("#")){
+			String msg = event.getMessage().substring(1, event.getMessage().length());
+			for(Player allPlayers : players){
+				if(allPlayers.hasPermission("zen.opchat.visible") || allPlayers.equals(player)){
+					playerHelper.sendChatMessage(allPlayers, ChatColor.YELLOW + "[OPCHAT] " + plugin.playerHelper.getPersonalPlayerPrefix(player).replace('&', '\u00a7') + player.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.RESET + msg);
+				}
+			}
+			return;
+		}
+		
+		for(Player allPlayers : players){
+			if(mPlayer.hasFaction()){
+				FPlayer mAllPlayers = FPlayerColl.get(allPlayers);
+				ChatColor col = ChatColor.GOLD;
+				if(mPlayer.getFaction().getRelationTo(mAllPlayers.getFaction()) == Relation.ALLY)
+					col = ChatColor.GREEN;
+				else if(mPlayer.getFaction().getRelationTo(mAllPlayers.getFaction()) == Relation.ENEMY)
+					col = ChatColor.RED;
+				else if(mPlayer.getFaction().getRelationTo(mAllPlayers.getFaction()) == Relation.TRUCE)
+					col = ChatColor.AQUA;
+				else if(mPlayer.getFaction().getRelationTo(mAllPlayers.getFaction()) == Relation.MEMBER)
+					col = ChatColor.DARK_GRAY;
+				if(playerHelper.getPlayerSuffix(player) != null){
+					playerHelper.sendChatMessage(allPlayers, col + mPlayer.getFaction().getTag() + " " + plugin.playerHelper.getPersonalPlayerPrefix(player).replace('&', '\u00a7') + player.getDisplayName() + playerHelper.getPersonalPlayerSuffix(player) + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
+				}else{
+					playerHelper.sendChatMessage(allPlayers, col + mPlayer.getFaction().getTag() + " " + plugin.playerHelper.getPersonalPlayerPrefix(player).replace('&', '\u00a7') + player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
+				}
+			}else{
+				if(playerHelper.getPlayerSuffix(player) != null){
+					playerHelper.sendChatMessage(allPlayers, plugin.playerHelper.getPersonalPlayerPrefix(player).replace('&', '\u00a7') + player.getDisplayName() + playerHelper.getPersonalPlayerSuffix(player) + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
+				}else{
+					playerHelper.sendChatMessage(allPlayers, plugin.playerHelper.getPersonalPlayerPrefix(player).replace('&', '\u00a7') + player.getDisplayName() + ChatColor.WHITE + ": " + event.getMessage().replace('&', '\u00a7'));
+				}
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

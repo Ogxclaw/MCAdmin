@@ -1,7 +1,5 @@
 package com.kirik.zen.config.time;
 
-import java.time.LocalDate;
-
 public class Days {
 	
 	public static int findDay(String day){
@@ -50,8 +48,6 @@ public class Days {
 	}
 	
 	public static int addDays(int day1, int day2){
-		LocalDate date = LocalDate.now();
-		int year = date.getDayOfYear();
 		int day3 = day1 + day2;
 		while(day3 > 365){
 			day3 -= 365;

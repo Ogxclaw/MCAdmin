@@ -11,7 +11,7 @@ import com.kirik.zen.core.util.PlayerNotFoundException;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names({"unban", "pardon"})
-@Help("Unbans a player from the server.")
+@Help("Unbans a user from the server.")
 @Usage("<name>")
 @Permission("zen.users.unban")
 public class UnbanCommand extends ICommand {

@@ -10,6 +10,7 @@ import com.kirik.zen.commands.system.ICommand.Permission;
 import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.core.util.PlayerNotFoundException;
 import com.kirik.zen.core.util.Utils;
+import com.kirik.zen.main.PermissionDeniedException;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names("settag")
@@ -26,6 +27,12 @@ public class SetTagCommand extends ICommand {
 			throw new PlayerNotFoundException();
 		
 		Player targetPlayer = playerHelper.matchPlayerSingle(args[0]);
+		
+		int senderLevel = playerHelper.getPlayerLevel((Player)commandSender);
+		int targetLevel = playerHelper.getPlayerLevel(targetPlayer);
+		
+		if(senderLevel <= targetLevel && targetPlayer != (Player)commandSender)
+			throw new PermissionDeniedException();
 		
 		String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
 		if(tag.equals("none")){

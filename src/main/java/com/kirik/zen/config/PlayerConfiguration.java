@@ -17,7 +17,7 @@ public class PlayerConfiguration {
 	private Zen plugin = Zen.instance;
 	
 	public PlayerConfiguration(UUID uuid){
-		this.uuid = uuid;
+		this.setUuid(uuid);
 		
 		playerData = new File(plugin.getDataFolder() + "/players/", uuid + ".yml");
 		playerDataConfig = YamlConfiguration.loadConfiguration(playerData);
@@ -47,6 +47,14 @@ public class PlayerConfiguration {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 
 }

@@ -18,9 +18,35 @@ public class HomeCommand extends ICommand {
 	
 	@Override
 	public void run(final CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
-		Player player = (Player)commandSender;
-		player.teleport(playerHelper.getHome(player));
-		playerHelper.sendDirectedMessage(commandSender, "Teleported home.");
+		final Player player = (Player)commandSender;
+		if(playerHelper.getHome(player) == null){
+			if(player.hasPermission("zen.home.override")){
+				player.teleport(plugin.getServer().getWorld("world").getSpawnLocation());
+				playerHelper.sendDirectedMessage(commandSender, "Teleported home.");
+			}else{
+				playerHelper.sendDirectedMessage(player, "Please wait 5 seconds for teleportation.");
+				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+					public void run(){
+						player.teleport(plugin.getServer().getWorld("world").getSpawnLocation());
+						playerHelper.sendDirectedMessage(commandSender, "Teleported home.");
+					}
+				}, 100L);
+			}
+		}else{
+			if(player.hasPermission("zen.home.override")){
+				player.teleport(playerHelper.getHome(player));
+				playerHelper.sendDirectedMessage(commandSender, "Teleported home.");
+			}else{
+				playerHelper.sendDirectedMessage(player, "Please wait 5 seconds for teleportation.");
+				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+					public void run(){
+						player.teleport(playerHelper.getHome(player));
+						playerHelper.sendDirectedMessage(commandSender, "Teleported home.");
+					}
+				}, 100L);
+			}
+			//player.teleport(playerHelper.getHome(player));
+		}
 	}
 	
 }

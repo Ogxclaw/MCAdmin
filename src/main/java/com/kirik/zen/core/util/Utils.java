@@ -31,7 +31,7 @@ public class Utils {
 	private Zen plugin;
 	
 	public Utils(Zen plugin){
-		this.plugin = plugin;
+		this.setPlugin(plugin);
 	}
 	
 	public static UUID CONSOLE_UUID = UUID.nameUUIDFromBytes("[CONSOLE]".getBytes());
@@ -151,6 +151,7 @@ public class Utils {
 	}
 	
 	//Added a package intake var
+	@SuppressWarnings("resource")
 	public static <T> List<Class<? extends T>> getSubClasses(Class<T> baseClass, String packageName) {
 		final List<Class<? extends T>> ret = new ArrayList<>();
 		final File file;
@@ -277,6 +278,14 @@ public class Utils {
 			sb.append(distance);
 		}
 		return sb;
+	}
+
+	public Zen getPlugin() {
+		return plugin;
+	}
+
+	public void setPlugin(Zen plugin) {
+		this.plugin = plugin;
 	}
 
 }

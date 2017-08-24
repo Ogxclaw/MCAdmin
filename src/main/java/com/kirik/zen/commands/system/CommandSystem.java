@@ -29,7 +29,11 @@ public class CommandSystem {
 		scanCommands("com.kirik.zen.main");
 		scanCommands("com.kirik.zen.bans");
 		scanCommands("com.kirik.zen.jail");
-		scanCommands("com.kirik.zen.factions");
+		//scanCommands("com.kirik.zen.factions");
+		scanCommands("com.kirik.zen.teleport");
+		scanCommands("com.kirik.zen.warps");
+		scanCommands("com.kirik.zen.vanish");
+		scanCommands("com.kirik.zen.fun");
 	}
 
 	public void scanCommands(String packageName) {

@@ -13,7 +13,7 @@ import com.kirik.zen.main.ZenCommandException;
 import com.kirik.zen.main.PermissionDeniedException;
 
 @Names("kick")
-@Help("Kicks specified player")
+@Help("Kicks specified user")
 @Usage("<name> [reason]")
 @Permission("zen.users.kick")
 public class KickCommand extends ICommand {
