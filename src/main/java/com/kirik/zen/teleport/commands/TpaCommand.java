@@ -14,7 +14,7 @@ import com.kirik.zen.teleport.RequestRunnable;
 
 @Names("tpa")
 @Help("Requests to teleport to a player")
-@Usage("<name>")
+@Usage("/tpa <name>")
 @Permission("zen.teleport.request")
 public class TpaCommand extends ICommand { 
 	

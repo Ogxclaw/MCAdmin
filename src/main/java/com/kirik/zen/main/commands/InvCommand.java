@@ -1,5 +1,7 @@
 package com.kirik.zen.main.commands;
 
+import java.util.Arrays;
+
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,7 +19,7 @@ import com.kirik.zen.main.ZenCommandException;
 public class InvCommand extends ICommand {
 	
 	@Override
-	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
+	public void run(final CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
 		Inventory customInv = plugin.getServer().createInventory(null, 9, "Custom Inv");
 		
 		ItemStack redShulker = new ItemStack(Material.WOOL, 1);
@@ -32,7 +34,13 @@ public class InvCommand extends ICommand {
 		customInv.setItem(8, greenShulker);
 		
 		Player player = (Player)commandSender;
-		player.openInventory(customInv);
+		foo(player);
+		//player.openInventory(customInv);
+		
+	}
+	
+	public void foo(Player p) {
+	     plugin.signMenu.open(p, new String[]{"", "^^^^^^^^", "Enter a price!", ""}, (player1, text) -> Arrays.stream(text).forEach(player1::sendMessage));
 	}
  
 }

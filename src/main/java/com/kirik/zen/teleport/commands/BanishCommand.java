@@ -13,7 +13,7 @@ import com.kirik.zen.main.ZenCommandException;
 
 @Names("banish")
 @Help("Forces a player to teleport to spawn")
-@Usage("<name>")
+@Usage("/banish <name>")
 @Permission("zen.teleport.banish")
 public class BanishCommand extends ICommand {
 

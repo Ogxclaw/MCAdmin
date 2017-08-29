@@ -7,10 +7,12 @@ import com.kirik.zen.commands.system.ICommand;
 import com.kirik.zen.commands.system.ICommand.Help;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
+import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names("spawn")
 @Help("Teleports the player to spawn")
+@Usage("/spawn")
 @Permission("zen.spawn")
 public class SpawnCommand extends ICommand {
 	

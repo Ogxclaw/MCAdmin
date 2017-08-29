@@ -13,7 +13,7 @@ import com.kirik.zen.main.ZenCommandException;
 
 @Names("leash")
 @Help("Leashes or unleashes a player.")
-@Usage("<name>")
+@Usage("/leash <name>")
 @Permission("zen.players.leash")
 public class LeashCommand extends ICommand {
 	

@@ -34,6 +34,7 @@ public class CommandSystem {
 		scanCommands("com.kirik.zen.warps");
 		scanCommands("com.kirik.zen.vanish");
 		scanCommands("com.kirik.zen.fun");
+		scanCommands("com.kirik.zen.economy");
 	}
 
 	public void scanCommands(String packageName) {

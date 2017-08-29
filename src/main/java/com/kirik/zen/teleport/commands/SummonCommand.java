@@ -12,7 +12,7 @@ import com.kirik.zen.main.ZenCommandException;
 
 @Names({"summon", "tphere"})
 @Help("Teleports a player to your current location")
-@Usage("<name>")
+@Usage("/summon <name>")
 @Permission("zen.teleport.summon")
 public class SummonCommand extends ICommand {
 	

@@ -4,13 +4,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kirik.zen.commands.system.ICommand;
+import com.kirik.zen.commands.system.ICommand.Help;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
+import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.main.ZenCommandException;
 import com.kirik.zen.teleport.Request;
 import com.kirik.zen.teleport.RequestRunnable;
 
 @Names({"summona", "tpahere"})
+@Help("Requests to summon a player.")
+@Usage("/summona <name>")
 @Permission("zen.teleport.request")
 public class SummonaCommand extends ICommand {
 	

@@ -14,7 +14,7 @@ import com.kirik.zen.main.ZenCommandException;
 
 @Names("freeze")
 @Help("Freezes/Unfreezes a player")
-@Usage("/freeze [player]")
+@Usage("/freeze <player>")
 @Permission("zen.user.freeze")
 public class FreezeCommand extends ICommand {
 

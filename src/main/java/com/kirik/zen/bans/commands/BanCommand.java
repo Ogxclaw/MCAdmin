@@ -19,14 +19,13 @@ import com.kirik.zen.main.PermissionDeniedException;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names("ban")
-@Help("Bans specified user. Specify offline players in quotation marks. \n" + 
+@Help("Bans specified user. Specify offline \nplayers in quotation marks. \n" + 
 		"Flags: \n" +
-		" -j to unjail the player first (TODO) \n" +
 		" -r to rollback the player \n" + 
 		" -o to ban an offline player \n" + 
-		" -t <time> to issue a temporary ban. Possible suffixes: \n" +
-		"	m=minutes, h=hours, d=days")
-@Usage("[<flags>] <name> [reason]")
+		" -t <time> to issue a temporary ban. \n" +
+		" Possible suffixes: \nd=days")
+@Usage("/ban [flags] <name> [reason]")
 @BooleanFlags("or")
 @StringFlags("t")
 @Permission("zen.users.ban")

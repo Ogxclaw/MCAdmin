@@ -12,7 +12,7 @@ import com.kirik.zen.main.ZenCommandException;
 
 @Names("home")
 @Help("Teleports player to their home")
-@Usage("")
+@Usage("/home")
 @Permission("zen.home")
 public class HomeCommand extends ICommand {
 	

@@ -15,7 +15,7 @@ import com.kirik.zen.main.ZenCommandException;
 
 @Names("setrank")
 @Help("Changes or resets the tag of a player")
-@Usage("[player] <rank>")
+@Usage("/setrank <player> <rank>")
 @Permission("zen.setrank")
 public class SetRankCommand extends ICommand {
 	

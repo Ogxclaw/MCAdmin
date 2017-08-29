@@ -8,10 +8,12 @@ import com.kirik.zen.commands.system.ICommand;
 import com.kirik.zen.commands.system.ICommand.Help;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
+import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names("setspawn")
 @Help("Sets the default spawn location of all players")
+@Usage("/setspawn")
 @Permission("zen.admin.setspawn")
 public class SetSpawnCommand extends ICommand {
 	

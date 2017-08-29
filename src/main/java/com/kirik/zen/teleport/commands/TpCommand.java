@@ -13,7 +13,7 @@ import com.kirik.zen.main.ZenCommandException;
 
 @Names({"tp", "teleport", "tele"})
 @Help("Teleports you to another player")
-@Usage("<name>")
+@Usage("/tp <name>")
 @Permission("zen.teleport.tp")
 public class TpCommand extends ICommand {
 

@@ -12,8 +12,8 @@ import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names("lookup")
-@Help("Gets ban and alt information about specified user (MCBANS AND ZEN INFO ONLY)")
-@Usage("<name>")
+@Help("Gets ban and alt information about \nspecified user (MCBANS AND ZEN INFO ONLY)")
+@Usage("/lookup <name>")
 @Permission("zen.users.lookup")
 public class LookupCommand extends ICommand {
 

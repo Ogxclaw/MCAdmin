@@ -10,7 +10,7 @@ import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names("mute")
-@Usage("<name>")
+@Usage("/mute <name>")
 @Permission("zen.chat.mute")
 public class MuteCommand extends ICommand {
 	

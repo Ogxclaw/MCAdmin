@@ -19,8 +19,8 @@ import com.kirik.zen.core.util.PlayerFindException;
 import com.kirik.zen.core.util.Utils;
 
 @Names({ "who", "list" })
-@Help("Prints user list if used without params or information about a specified user")
-@Usage("[name]")
+@Help("Prints user list if used or \ninformation about a specified user")
+@Usage("/who [name]")
 @Permission("zen.who")
 public class WhoCommand extends ICommand {
 

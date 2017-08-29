@@ -15,8 +15,13 @@ import com.kirik.zen.componentsystem.ComponentSystem;
 import com.kirik.zen.config.BansConfiguration;
 import com.kirik.zen.config.UUIDConfiguration;
 import com.kirik.zen.core.util.PlayerHelper;
+import com.kirik.zen.economy.Economy;
+import com.kirik.zen.economy.EconomyConfiguration;
+import com.kirik.zen.economy.listener.EconomyListener;
+import com.kirik.zen.main.SignMenu;
 import com.kirik.zen.main.StateContainer;
 import com.kirik.zen.main.console.ZenConsoleCommands;
+import com.kirik.zen.main.listeners.InventoryListener;
 import com.kirik.zen.main.listeners.ZenPlayerListener;
 import com.kirik.zen.vanish.Vanish;
 import com.kirik.zen.warps.WarpsConfiguration;
@@ -32,6 +37,7 @@ public class Zen extends JavaPlugin {
 	
 	public static Zen instance;
 	public PlayerHelper playerHelper;
+	public Economy eco;
 	public CommandSystem commandSystem;
 	public ComponentSystem componentSystem = new ComponentSystem();
 	
@@ -40,8 +46,11 @@ public class Zen extends JavaPlugin {
 	private BansConfiguration bansConfig;
 	private UUIDConfiguration uuidConfig;
 	private WarpsConfiguration warpsConfig;
+	private EconomyConfiguration ecoConfig;
 	
 	public Vanish vanish = new Vanish(this);
+	
+	public SignMenu signMenu;
 	
 	//VAULT
 	public Permission permission = null;
@@ -66,6 +75,7 @@ public class Zen extends JavaPlugin {
 		//currentDate = new Date(System.currentTimeMillis());
 		
 		playerHelper = new PlayerHelper(this);
+		eco = new Economy(this);
 		
 		//checkPlugins();
 		
@@ -86,6 +96,12 @@ public class Zen extends JavaPlugin {
 		warpsConfig.createWarpsDefaults();
 		this.saveWarpsConfig();
 		
+		ecoConfig = new EconomyConfiguration();
+		ecoConfig.createEcoConfig();
+		ecoConfig.createEcoDefaults();
+		this.saveEcoConfig();
+		
+		
 		setupWorldEdit();
 		logToConsole("WorldEdit Hooked.");
 		
@@ -96,9 +112,13 @@ public class Zen extends JavaPlugin {
 		setupChat();
 		logToConsole("Vault Hooked.");
 		
+		signMenu = new SignMenu(this);
+		
 		//new CombatListener();
 		//new FactionsHookListener();
 		new ZenPlayerListener();
+		new InventoryListener();
+		new EconomyListener();
 		componentSystem.registerListeners();
 		logToConsole("Listeners loaded.");
 		
@@ -142,6 +162,14 @@ public class Zen extends JavaPlugin {
 	}
 	
 	//START CONFIGS
+	public FileConfiguration getEcoConfig(){
+		return ecoConfig.getEcoConfig();
+	}
+	
+	public void saveEcoConfig(){
+		ecoConfig.saveEcoConfig();
+	}
+	
 	public FileConfiguration getBansConfig(){
 		return bansConfig.getBansConfig();
 	}

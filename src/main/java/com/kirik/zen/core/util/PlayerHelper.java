@@ -1,5 +1,6 @@
 package com.kirik.zen.core.util;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -410,23 +411,16 @@ public class PlayerHelper extends StateContainer {
 	
 	//wild tp
 	public int getSolidBlock(int x, int z, Player target) {
-        /*if(target.getWorld().getBiome(target.getLocation().getBlockX(),target.getLocation().getBlockZ()).equals(Biome.HELL))
-            return getSolidBlockNether(x,z,target);
-        int y = 0;
-        if(target.getWorld().getBiome(x,z).equals(Biome.HELL))
-            return getSolidBlockNether(x,z,target);*/
 		int y = 0;
         for (int i = 0; i <= target.getWorld().getMaxHeight(); i++) {
             y = i;
-            if (!target.getWorld().getBlockAt(x, y, z).isEmpty() && target.getWorld().getBlockAt(x, y + 1, z).isEmpty()
+            if (!target.getWorld().getBlockAt(x, y, z).isEmpty() 
+            		&& target.getWorld().getBlockAt(x, y + 1, z).isEmpty()
                     && target.getWorld().getBlockAt(x, y + 2, z).isEmpty()
-                    && target.getWorld().getBlockAt(x, y + 3, z).isEmpty() 
-                    && target.getWorld().getBlockAt(x, y + 4, z).isEmpty() 
-                    && target.getWorld().getBlockAt(x, y + 5, z).isEmpty()
                     && !checkBlocks(target, x, y, z))
-                return y + 5;
+                return y + 2;
         }
-        return 5;
+        return 2;
     }
 	
 	private boolean checkBlocks(Player p, int x, int y, int z) {
@@ -434,7 +428,9 @@ public class PlayerHelper extends StateContainer {
                 p.getWorld().getBlockAt(x, y, z).getType().equals(Material.LEAVES_2)&&
                 !p.getWorld().getBlockAt(x,y,z).isLiquid() && p.getWorld().getBlockAt(x, y - 1, z).getType().equals(Material.LEAVES) &&
                 p.getWorld().getBlockAt(x, y - 1, z).getType().equals(Material.LEAVES_2)&&
-                !p.getWorld().getBlockAt(x,y - 1,z).isLiquid();
+                (!p.getWorld().getBlockAt(x,y - 1,z).isLiquid() ||
+                !p.getWorld().getBlockAt(x,y - 2,z).isLiquid() ||
+                !p.getWorld().getBlockAt(x,y - 3,z).isLiquid());
     }
 	
 	public int getSolidBlock(int x, int z, String w, Player p) {
@@ -468,4 +464,17 @@ public class PlayerHelper extends StateContainer {
         }
         return 10;
     }*/
+    
+    //KITS
+    public void setKitTimer(Player player, String kitName, int days){
+    	PlayerConfiguration playerConfig = new PlayerConfiguration(player.getUniqueId());
+    	LocalDate date = LocalDate.now();
+    	int dayOfYear = date.getDayOfYear();
+    	int expireTime = dayOfYear + days;
+    	if(expireTime > 365){
+    		expireTime -= 365;
+    	}
+    	playerConfig.getPlayerConfig().set("dailyTimer", dayOfYear + days);
+    	playerConfig.savePlayerConfig();
+    }
 }

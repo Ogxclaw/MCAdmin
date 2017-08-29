@@ -11,8 +11,8 @@ import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names("sethome")
-@Help("Sets a player's home to their current position")
-@Usage("")
+@Help("Sets a player's home to \ntheir current position")
+@Usage("/sethome")
 @Permission("zen.sethome")
 public class SetHomeCommand extends ICommand {
 	

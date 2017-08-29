@@ -13,11 +13,11 @@ import com.kirik.zen.core.util.Utils;
 import com.kirik.zen.main.PermissionDeniedException;
 import com.kirik.zen.main.ZenCommandException;
 
-@Names("settag")
-@Help("Changes or resets the tag of a player")
-@Usage("/settag <player> <tag|none>")
-@Permission("zen.settag")
-public class SetTagCommand extends ICommand {
+@Names({"setnick", "nick"})
+@Help("Sets the nickname of a player")
+@Usage("/setnick <name> <newName|none>")
+@Permission("zen.setnick")
+public class SetNickCommand extends ICommand {
 	
 	@Override
 	public void run(final CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
@@ -36,13 +36,13 @@ public class SetTagCommand extends ICommand {
 		
 		String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
 		if(tag.equals("none")){
-			playerHelper.setPlayerSuffix(targetPlayer, "");
-			playerHelper.sendServerMessage(commandSender.getName() + " reset the tag of " + targetName + "\u00a7f!");
+			targetPlayer.setDisplayName(targetPlayer.getName());
+			playerHelper.sendServerMessage(commandSender.getName() + " reset the nickname of " + targetName + "\u00a7f!");
 			
 		}else{
-			playerHelper.setPlayerSuffix(targetPlayer, " " + tag);
-			playerHelper.sendServerMessage(commandSender.getName() + " set tag of " + targetName + " to " + tag + "\u00a7f!");
+			targetPlayer.setDisplayName(tag);
+			playerHelper.sendServerMessage(commandSender.getName() + " set the nickname of " + targetName + " to " + tag + "\u00a7f!");
 		}
 	}
-	
+
 }

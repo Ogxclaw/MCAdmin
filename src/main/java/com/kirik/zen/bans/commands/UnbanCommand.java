@@ -12,7 +12,7 @@ import com.kirik.zen.main.ZenCommandException;
 
 @Names({"unban", "pardon"})
 @Help("Unbans a user from the server.")
-@Usage("<name>")
+@Usage("/unban <name>")
 @Permission("zen.users.unban")
 public class UnbanCommand extends ICommand {
 	

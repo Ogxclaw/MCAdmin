@@ -12,7 +12,7 @@ import com.kirik.zen.commands.system.ICommand.Usage;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names({"gamemode", "gm"})
-@Usage("<survival|creative|adventure|spectator|s|c|a|sp> [name]")
+@Usage("/gm <s|c|a|sp|0|1|2|3> [name]")
 @Help("Sets the gamemode of one of you fucks")
 @Permission("zen.gamemode")
 public class GameModeCommand extends ICommand {
@@ -25,19 +25,19 @@ public class GameModeCommand extends ICommand {
 		Player player = (Player)commandSender;
 		GameMode playerGamemode = player.getGameMode();
 		switch(gamemode){
-		case "survival":
+		case "0":
 		case "s":
 			playerGamemode = GameMode.SURVIVAL;
 			break;
-		case "creative":
+		case "1":
 		case "c":
 			playerGamemode = GameMode.CREATIVE;
 			break;
-		case "adventure":
+		case "2":
 		case "a":
 			playerGamemode = GameMode.ADVENTURE;
 			break;
-		case "spectator":
+		case "3":
 		case "sp":
 			playerGamemode = GameMode.SPECTATOR;
 			break;

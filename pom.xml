@@ -23,6 +23,10 @@
       <id>ac-repo</id>
       <url>https://raw.github.com/mazentheamazin/AccountsClient/mvn-repo/</url>
     </repository>
+    <repository>
+      <id>dmulloy2-repo</id>
+      <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
+    </repository>
   </repositories>
 
   <properties>
@@ -69,6 +73,11 @@
        <groupId>org.json</groupId>
        <artifactId>json</artifactId>
        <version>20140107</version>
+    </dependency>
+    <dependency>
+       <groupId>com.comphenix.protocol</groupId>
+       <artifactId>ProtocolLib-API</artifactId>
+       <version>4.3.0</version>
     </dependency>
   </dependencies>
 </project>
