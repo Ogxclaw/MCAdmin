@@ -54,6 +54,9 @@ public class ZenPlayerListener extends BaseListener {
 			playerHelper.setPlayerRank(player, "member"); //TODO find default group / set it manually.
 			plugin.logToConsole(player.getName() + " has logged in with no rank and given member.");
 		}
+		
+		player.setPlayerListName(plugin.playerHelper.getPersonalPlayerPrefix(player).replace('&', '\u00a7') + player.getName());
+		
 		//TODO Aggravating, but no better way to fix this at the moment. Unless I hard code ranks which is a big no-no
 		event.setJoinMessage(ChatColor.DARK_GREEN + "[+]" + plugin.playerHelper.getPlayerPrefix(player).replace('&', '\u00a7') + " " + player.getDisplayName() + ChatColor.YELLOW + " connected!");
 		plugin.playerHelper.sendDirectedMessage(player, "Welcome to the \u00a76Zenium Server Network\u00a7f!");

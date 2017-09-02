@@ -29,7 +29,7 @@ public class PayCommand extends ICommand {
 			return;
 		}
 		playerHelper.sendDirectedMessage(sender, "Paid " + target.getName() + " " + amt + "gp");
-		playerHelper.sendDirectedMessage(target, "Received " + amt + "gp from " + target.getName());
+		playerHelper.sendDirectedMessage(target, "Received " + amt + "gp from " + sender.getName());
 	}
 
 }

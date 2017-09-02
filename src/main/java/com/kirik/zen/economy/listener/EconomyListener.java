@@ -35,31 +35,59 @@ public class EconomyListener extends BaseListener {
 	@EventHandler
 	public void onSignClick(PlayerInteractEvent e){
 		Economy econ = new Economy(plugin);
-		if(e.getClickedBlock().getType() == Material.WALL_SIGN || e.getClickedBlock().getType() == Material.SIGN || e.getClickedBlock().getType() == Material.SIGN_POST){
+		/*if(e.getMaterial() == Material.FISHING_ROD) {
+			//playerHelper.sendDirectedMessage(e.getPlayer(), "This is a thing.");
+			return;
+		}*/
+		if(e.getClickedBlock() == null) {
+			return;
+		}
+		if(e.getClickedBlock().getType() == Material.WALL_SIGN/* || e.getClickedBlock().getType() == Material.SIGN || e.getClickedBlock().getType() == Material.SIGN_POST*/){
 			Sign s = (Sign)e.getClickedBlock().getState();
 			String[] text = s.getLines();
 			if(text[0].equals(ChatColor.DARK_PURPLE + "[ZenShop]")){
 				Material mat = Material.getMaterial(text[1].toUpperCase());
+				String itemName = "";
+				if(text[1].toUpperCase().equals("CREEPER_EGG")) {
+					itemName = "CREEPER_EGG";
+				}else if(text[1].toUpperCase().equals("HORSE_EGG")) {
+					itemName = "HORSE_EGG";
+				}else {
+					itemName = mat.name();
+				}
+				
 				String[] prices = text[2].split(":");
-				int[] price = {Integer.parseInt(prices[0]), Integer.parseInt(prices[1])};
+				int[] price = {Integer.parseInt(prices[0].substring(1)), Integer.parseInt(prices[1].substring(1))};
 				for(int i : price){
 					if(i < 0){
 						playerHelper.sendDirectedMessage(e.getPlayer(), "This shop isn't configured correctly, please contact an admin/manager.");
 						return;
 					}
 				}
+				
 				int amount = Integer.parseInt(text[3]);
+				
+				ItemStack stack = null;
+				if(itemName == "CREEPER_EGG") {
+					stack = new ItemStack(Material.MONSTER_EGG, amount, (short)50);
+				}else if(itemName == "HORSE_EGG") {
+					stack = new ItemStack(Material.MONSTER_EGG, amount, (short)100);
+				}
+				else {
+					stack = new ItemStack(mat, amount);
+				}
+				
 				Player player = e.getPlayer();
 				if(e.getAction() == Action.LEFT_CLICK_BLOCK){
 					//buy action
 					if(econ.getBalance(player) >= price[0]){
-						player.getInventory().addItem(new ItemStack(mat, amount));
+						player.getInventory().addItem(stack);
 						try {
 							econ.subtractFromBalance(player, price[0]);
 						} catch (NotEnoughMoneyException e1) {
 							playerHelper.sendDirectedMessage(player, e1.getMessage());
 						}
-						playerHelper.sendDirectedMessage(player, mat + " bought for " + price[0] + "gp");
+						playerHelper.sendDirectedMessage(player, itemName + " bought for " + price[0] + "gp");
 					}else{
 						playerHelper.sendDirectedMessage(player, "Not enough money");
 					}
@@ -68,12 +96,14 @@ public class EconomyListener extends BaseListener {
 					if(contains(player, mat, amount)){
 						remove(player, new ItemStack(mat, amount));
 						econ.addToBalance(player, price[1]);
-						playerHelper.sendDirectedMessage(player, mat + " sold for " + price[1] + "gp");
+						playerHelper.sendDirectedMessage(player, itemName + " sold for " + price[1] + "gp");
 					}else{
 						playerHelper.sendDirectedMessage(player, "You don't have enough items to sell.");
 					}
 				}
 			}
+		}else {
+			return;
 		}
 	}
 	

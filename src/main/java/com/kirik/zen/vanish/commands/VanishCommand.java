@@ -24,13 +24,25 @@ public class VanishCommand extends ICommand {
 		boolean isVanished = playerConfig.getPlayerConfig().getBoolean("isVanished");
 		if(isVanished){
 			plugin.vanish.showPlayer(player);
-			playerHelper.sendDirectedMessage(commandSender, "Unvanished.");
+			for(Player p : plugin.getServer().getOnlinePlayers()) {
+				int pLevel = playerHelper.getPlayerLevel(p);
+				int senderLevel = playerHelper.getPlayerLevel(player);
+				if(pLevel >= senderLevel) {
+					playerHelper.sendDirectedMessage(p, player.getName() + " unvanished!");
+				}
+			}
 		}else{
 			plugin.vanish.hidePlayer(player);
 			/*IChatBaseComponent barmsg = ChatSerializer.a("{\"text\":\"\u00a7aYou are currently vanished!\"}");
 			PacketPlayOutChat packetPlayOutChat = new PacketPlayOutChat(barmsg, ChatMessageType.GAME_INFO);
 			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutChat);*/
-			playerHelper.sendDirectedMessage(commandSender, "Vanished.");
+			for(Player p : plugin.getServer().getOnlinePlayers()) {
+				int pLevel = playerHelper.getPlayerLevel(p);
+				int senderLevel = playerHelper.getPlayerLevel(player);
+				if(pLevel >= senderLevel) {
+					playerHelper.sendDirectedMessage(p, player.getName() + " vanished!");
+				}
+			}
 		}
 	}
 
