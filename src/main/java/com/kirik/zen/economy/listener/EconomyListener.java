@@ -1,5 +1,6 @@
 package com.kirik.zen.economy.listener;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -13,10 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import com.kirik.zen.config.PlayerConfiguration;
 import com.kirik.zen.economy.Economy;
 import com.kirik.zen.economy.NotEnoughMoneyException;
-import com.kirik.zen.main.PermissionDeniedException;
 import com.kirik.zen.main.listeners.BaseListener;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class EconomyListener extends BaseListener {
 	
@@ -70,7 +68,7 @@ public class EconomyListener extends BaseListener {
 					if(contains(player, mat, amount)){
 						remove(player, new ItemStack(mat, amount));
 						econ.addToBalance(player, price[1]);
-						playerHelper.sendDirectedMessage(player, "Item sold");
+						playerHelper.sendDirectedMessage(player, mat + " sold for " + price[1] + "gp");
 					}else{
 						playerHelper.sendDirectedMessage(player, "You don't have enough items to sell.");
 					}

@@ -2,6 +2,7 @@ package com.kirik.zen.core;
 
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
@@ -27,7 +28,6 @@ import com.kirik.zen.vanish.Vanish;
 import com.kirik.zen.warps.WarpsConfiguration;
 import com.sk89q.worldedit.WorldEdit;
 
-import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import net.redstoneore.legacyfactions.Factions;
