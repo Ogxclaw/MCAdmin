@@ -21,6 +21,9 @@ public class BanishCommand extends ICommand {
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
 		//TODO silent flag
 		//TODO player level
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
+		
 		Player target = playerHelper.matchPlayerSingle(args[0]);
 		Location spawnLocation = plugin.getServer().getWorld("world").getSpawnLocation();
 		if(target.getLocation().getWorld() != plugin.getServer().getWorld("world")){

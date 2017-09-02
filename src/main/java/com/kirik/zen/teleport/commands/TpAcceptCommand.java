@@ -19,6 +19,9 @@ public class TpAcceptCommand extends ICommand {
 	
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
+		
 		Player byPlayer = null;
 		if(args.length > 0) {
 			byPlayer = playerHelper.matchPlayerSingle(args[0]);

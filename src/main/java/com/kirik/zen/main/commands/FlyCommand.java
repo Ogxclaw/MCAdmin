@@ -16,6 +16,7 @@ import com.kirik.zen.main.ZenCommandException;
 @Permission("zen.admin.fly")
 public class FlyCommand extends ICommand {
 	
+	//TODO add enable fly for others?
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
 		Player player = (Player)commandSender;

@@ -19,6 +19,9 @@ public class SetBalCommand extends ICommand {
 	
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
+		if(args.length < 2)
+			throw new ZenCommandException(this.getUsage());
+		
 		Player target = playerHelper.matchPlayerSingle(args[0]);
 		int amt = Integer.parseInt(args[1]);
 		if(target.getName() == "Swordrush01")

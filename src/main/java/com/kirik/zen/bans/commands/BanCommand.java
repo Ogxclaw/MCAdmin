@@ -35,6 +35,9 @@ public class BanCommand extends ICommand {
 	
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
+		
 		args = parseFlags(args);
 		if(!booleanFlags.contains('o'))
 			executeBan(commandSender, args[0], Utils.concatArray(args, 1, null), plugin, booleanFlags.contains('r'), stringFlags.get('t'));

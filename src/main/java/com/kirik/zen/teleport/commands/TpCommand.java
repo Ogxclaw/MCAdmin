@@ -22,6 +22,9 @@ public class TpCommand extends ICommand {
 		//TODO Add silent tp, add coord tp
 		//TODO player level
 		//TODO notp
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
+		
 		final Player target = playerHelper.matchPlayerSingle(args[0]);
 		final Location targetLocation = target.getLocation();
 		final Player player = (Player)commandSender;

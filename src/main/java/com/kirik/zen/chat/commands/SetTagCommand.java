@@ -21,6 +21,9 @@ public class SetTagCommand extends ICommand {
 	
 	@Override
 	public void run(final CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
+		
 		String targetName = playerHelper.completePlayerName(args[0], false);
 		
 		if(targetName == null)

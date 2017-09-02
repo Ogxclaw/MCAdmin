@@ -16,6 +16,9 @@ public class MuteCommand extends ICommand {
 	
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
+		
 		Player target = playerHelper.matchPlayerSingle(args[0]);
 		boolean isMuted = playerHelper.isMuted(target);
 		if(isMuted){

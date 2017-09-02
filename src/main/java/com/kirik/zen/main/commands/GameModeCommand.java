@@ -19,7 +19,7 @@ public class GameModeCommand extends ICommand {
 	
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
-		if(args.length < 0)
+		if(args.length < 1)
 			throw new ZenCommandException(this.getUsage());
 		String gamemode = args[0];
 		Player player = (Player)commandSender;

@@ -20,6 +20,9 @@ public class TpaCommand extends ICommand {
 	
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
+		
 		final Player player = (Player)commandSender;
 		final Player target = playerHelper.matchPlayerSingle(args[0]);
 		//requestTeleport((Player)commandSender, target, (Player)commandSender, target, commandSender.getName() + " would like to teleport to you!");

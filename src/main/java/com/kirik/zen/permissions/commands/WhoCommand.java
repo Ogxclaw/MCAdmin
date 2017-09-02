@@ -26,8 +26,15 @@ public class WhoCommand extends ICommand {
 
 	@Override
 	public void run(final CommandSender commandSender, String[] args, String argStr, String commandName) throws PlayerFindException {
-		if(args.length == 0)
+		
+		if(args.length == 0) {
+			String msg = "Online players: ";
+			for(Player p : plugin.getServer().getOnlinePlayers()) {
+				msg = msg + p.getName() + ", ";
+			}
+			playerHelper.sendDirectedMessage(commandSender, msg.substring(0, msg.length() - 2));
 			return;
+		}
 		
 		final Location defaultLocation = new Location(plugin.getOrCreateWorld("world", Environment.NORMAL), Double.POSITIVE_INFINITY, 0, 0);
 		final Location location = getCommandSenderLocation(commandSender, false, defaultLocation);

@@ -19,6 +19,9 @@ public class LookupCommand extends ICommand {
 
 	@Override
 	public void run(final CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
+		
 		Player target = playerHelper.matchPlayerSingle(args[0]);
 		playerHelper.sendDirectedMessage(commandSender, "Looking up information on " + target.getName() + "...");
 		MCBansResolver.checkPlayer(target.getUniqueId().toString());	

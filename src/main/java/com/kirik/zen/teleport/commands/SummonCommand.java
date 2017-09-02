@@ -20,6 +20,9 @@ public class SummonCommand extends ICommand {
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
 		//TODO Add silent summon
 		//TODO player level
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
+		
 		final Player target = playerHelper.matchPlayerSingle(args[0]);
 		final Player player = (Player)commandSender;
 		if(commandSender.hasPermission("zen.teleport.tp.override")){

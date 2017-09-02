@@ -21,6 +21,8 @@ public class WildCommand extends ICommand {
 	
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
+		if(args.length < 1)
+			throw new ZenCommandException(this.getUsage());
 		
 		Player player = (Player)commandSender;
 		//playerHelper.hasBlockAirAboveHead(player);
