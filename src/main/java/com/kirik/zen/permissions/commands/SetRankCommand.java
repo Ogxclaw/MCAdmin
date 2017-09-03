@@ -24,6 +24,21 @@ public class SetRankCommand extends ICommand {
 		if(args.length < 2)
 			throw new ZenCommandException(this.getUsage());
 		
+		if(!(commandSender instanceof Player)) {
+			Player target = playerHelper.matchPlayerSingle(args[0]);
+			
+			String rank = args[1];
+			String[] groups = plugin.permission.getGroups();
+			if(Arrays.asList(groups).contains(rank)){
+				playerHelper.setPlayerRank(target, rank);
+			}else{
+				throw new ZenCommandException("Rank \"" + rank + "\" not found!");
+			}
+			playerHelper.setPlayerRank(target, rank);
+			playerHelper.sendServerMessage("CONSOLE set rank of " + target.getName() + " to " + rank);
+			return;
+		}
+		
 		String targetName = playerHelper.completePlayerName(args[0], false);
 		
 		if(targetName == null)
