@@ -24,6 +24,26 @@ public class SetTagCommand extends ICommand {
 		if(args.length < 1)
 			throw new ZenCommandException(this.getUsage());
 		
+		if(!(commandSender instanceof Player)) {
+			String targetName = playerHelper.completePlayerName(args[0], false);
+			
+			if(targetName == null)
+				throw new PlayerNotFoundException();
+			
+			Player targetPlayer = playerHelper.matchPlayerSingle(args[0]);
+			
+			String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
+			if(tag.equals("none")){
+				playerHelper.setPlayerSuffix(targetPlayer, "");
+				playerHelper.sendServerMessage("CONSOLE reset the tag of " + targetName + "\u00a7f!");
+				
+			}else{
+				playerHelper.setPlayerSuffix(targetPlayer, " " + tag);
+				playerHelper.sendServerMessage("CONSOLE set tag of " + targetName + " to " + tag + "\u00a7f!");
+			}
+			return;
+		}
+		
 		String targetName = playerHelper.completePlayerName(args[0], false);
 		
 		if(targetName == null)

@@ -23,6 +23,16 @@ public class KickCommand extends ICommand {
 		if(args.length < 1)
 			throw new ZenCommandException(this.getUsage());
 		
+		if(!(commandSender instanceof Player)) {
+			final Player target = playerHelper.matchPlayerSingle(args[0]);
+			
+			final String reason = Utils.concatArray(args, 1, "Kicked");
+			
+			kickPlayer(commandSender, target, reason);
+			playerHelper.sendServerMessage("CONSOLE kicked " + target.getName() + " ((" + reason + "))");
+			return;
+		}
+		
 		final Player target = playerHelper.matchPlayerSingle(args[0]);
 		
 		if(playerHelper.getPlayerLevel((Player)commandSender) < playerHelper.getPlayerLevel(target))

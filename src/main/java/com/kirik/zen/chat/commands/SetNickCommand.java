@@ -24,6 +24,26 @@ public class SetNickCommand extends ICommand {
 		if(args.length < 1)
 			throw new ZenCommandException(this.getUsage());
 		
+		if(!(commandSender instanceof Player)) {
+			String targetName = playerHelper.completePlayerName(args[0], false);
+			
+			if(targetName == null)
+				throw new PlayerNotFoundException();
+			
+			Player targetPlayer = playerHelper.matchPlayerSingle(args[0]);
+			
+			String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
+			if(tag.equals("none")){
+				targetPlayer.setDisplayName(targetPlayer.getName());
+				playerHelper.sendServerMessage("CONSOLE reset the nickname of " + targetName + "\u00a7f!");
+				
+			}else{
+				targetPlayer.setDisplayName(tag);
+				playerHelper.sendServerMessage("CONSOLE set the nickname of " + targetName + " to " + tag + "\u00a7f!");
+			}
+			return;
+		}
+		
 		String targetName = playerHelper.completePlayerName(args[0], false);
 		
 		if(targetName == null)

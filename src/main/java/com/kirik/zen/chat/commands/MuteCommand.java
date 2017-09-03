@@ -19,6 +19,18 @@ public class MuteCommand extends ICommand {
 		if(args.length < 1)
 			throw new ZenCommandException(this.getUsage());
 		
+		if(!(commandSender instanceof Player)) {
+			Player target = playerHelper.matchPlayerSingle(args[0]);
+			boolean isMuted = playerHelper.isMuted(target);
+			if(isMuted){
+				playerHelper.setPlayerMuted(target, false);
+			}else{
+				playerHelper.setPlayerMuted(target, true);
+			}
+			playerHelper.sendServerMessage("CONSOLE has " + (isMuted ? "unmuted " : "muted ") + target.getName() + "!");
+			return;
+		}
+		
 		Player target = playerHelper.matchPlayerSingle(args[0]);
 		boolean isMuted = playerHelper.isMuted(target);
 		if(isMuted){

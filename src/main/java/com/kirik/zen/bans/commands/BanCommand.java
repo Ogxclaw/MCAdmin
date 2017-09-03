@@ -46,6 +46,37 @@ public class BanCommand extends ICommand {
 	}
 	
 	public static void executeBan(CommandSender commandSender, String playerName, String reason, Zen plugin, boolean rollback, final String duration) throws ZenCommandException {
+		
+		if(!(commandSender instanceof Player)) {
+			Player target = plugin.playerHelper.matchPlayerSingle(playerName, false);
+			
+			if(rollback){
+				plugin.getServer().dispatchCommand(commandSender, "co rollback u:" + target.getName() + " r:-1 t:100d");
+				//asPlayer(commandSender).chat("/co rollback u:" + target.getName() + " r:-1 t:100d");
+			}
+			
+			if(reason == null){
+				reason = "Kickbanned by CONSOLE";
+			}
+			
+			final BanType type;
+			if(duration != null){
+				type = BanType.TEMPORARY;
+				
+				if(duration.length() < 2)
+					throw new ZenCommandException("Malformed ban duration");
+				
+				bans.ban(commandSender, target, reason, type, duration);
+			}else{
+				type = BanType.PERMANENT;
+				
+				bans.ban(commandSender, target, reason, type);
+			}
+		
+			KickCommand.kickPlayer(commandSender, target, reason);
+			return;
+		}
+		
 		if(!commandSender.hasPermission("zen.users.ban"))
 			throw new PermissionDeniedException();
 		

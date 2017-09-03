@@ -23,6 +23,22 @@ public class FreezeCommand extends ICommand {
 		if(args.length < 1)
 			throw new ZenCommandException(this.getUsage());
 		
+		if(!(commandSender instanceof Player)) {
+			Player target = playerHelper.matchPlayerSingle(args[0]);
+			boolean isFrozen = playerHelper.isFrozen(target);
+			
+			if(isFrozen){
+				playerHelper.setPlayerFrozen(target, false);
+				isFrozen = false;
+			}else{
+				playerHelper.setPlayerFrozen(target, true);
+				isFrozen = true;
+			}
+			//playerHelper.sendDirectedMessage(commandSender, target.getName() + " has been " + (isFrozen ? "frozen" : "unfrozen") + "!");
+			playerHelper.sendDirectedMessage(target, "You have been " + (isFrozen ? "frozen" : "unfrozen") + "!");
+			return;
+		}
+		
 		Player target = playerHelper.matchPlayerSingle(args[0]);
 		boolean isFrozen = playerHelper.isFrozen(target);
 		

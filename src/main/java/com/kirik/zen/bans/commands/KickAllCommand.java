@@ -22,6 +22,16 @@ public class KickAllCommand extends ICommand {
 		if(args.length < 1)
 			throw new ZenCommandException(this.getUsage());
 		
+		if(!(commandSender instanceof Player)) {
+			final String reason = Utils.concatArray(args, 1, "Kicked");
+			
+			for(Player ply : plugin.getServer().getOnlinePlayers()){
+				KickCommand.kickPlayer(commandSender, ply, reason);
+			}
+			playerHelper.sendServerMessage("CONSOLE kicked all players");
+			return;
+		}
+		
 		final String reason = Utils.concatArray(args, 1, "Kicked");
 		
 		for(Player ply : plugin.getServer().getOnlinePlayers()){
