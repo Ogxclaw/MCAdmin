@@ -19,9 +19,7 @@ public class SetSpawnCommand extends ICommand {
 	
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
-		//TODO kinda works but really doesn't
-		//TODO Make the spawn point go to a direct set of coords from a config file if set, if not set then go to default getSpawnLocation
-		//TODO dont make /spawn until this is fixed and works correctly.
+		//TODO does not account for pitch/yaw
 		Player player = (Player)commandSender;
 		
 		Location playerLocation = player.getLocation();

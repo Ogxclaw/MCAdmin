@@ -8,7 +8,6 @@ import com.kirik.zen.commands.system.ICommand.Help;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
 import com.kirik.zen.commands.system.ICommand.Usage;
-import com.kirik.zen.core.util.PlayerNotFoundException;
 import com.kirik.zen.core.util.Utils;
 import com.kirik.zen.main.PermissionDeniedException;
 import com.kirik.zen.main.ZenCommandException;
@@ -25,46 +24,34 @@ public class SetTagCommand extends ICommand {
 			throw new ZenCommandException(this.getUsage());
 		
 		if(!(commandSender instanceof Player)) {
-			String targetName = playerHelper.completePlayerName(args[0], false);
-			
-			if(targetName == null)
-				throw new PlayerNotFoundException();
-			
-			Player targetPlayer = playerHelper.matchPlayerSingle(args[0]);
+			Player target = playerHelper.matchPlayerSingle(args[0]);
 			
 			String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
 			if(tag.equals("none")){
-				playerHelper.setPlayerSuffix(targetPlayer, "");
-				playerHelper.sendServerMessage("CONSOLE reset the tag of " + targetName + "\u00a7f!");
+				playerHelper.setPlayerSuffix(target, "");
+				playerHelper.sendServerMessage("CONSOLE reset the tag of " + target.getName() + "\u00a7f!");
 				
 			}else{
-				playerHelper.setPlayerSuffix(targetPlayer, " " + tag);
-				playerHelper.sendServerMessage("CONSOLE set tag of " + targetName + " to " + tag + "\u00a7f!");
+				playerHelper.setPlayerSuffix(target, " " + tag);
+				playerHelper.sendServerMessage("CONSOLE set tag of " + target.getName() + " to " + tag + "\u00a7f!");
 			}
 			return;
 		}
 		
-		String targetName = playerHelper.completePlayerName(args[0], false);
+		Player player = (Player)commandSender;
+		Player target = playerHelper.matchPlayerSingle(args[0]);
 		
-		if(targetName == null)
-			throw new PlayerNotFoundException();
-		
-		Player targetPlayer = playerHelper.matchPlayerSingle(args[0]);
-		
-		int senderLevel = playerHelper.getPlayerLevel((Player)commandSender);
-		int targetLevel = playerHelper.getPlayerLevel(targetPlayer);
-		
-		if(senderLevel <= targetLevel && targetPlayer != (Player)commandSender)
+		if(playerHelper.getPlayerLevel(player) <= playerHelper.getPlayerLevel(target) && target != player)
 			throw new PermissionDeniedException();
 		
 		String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
 		if(tag.equals("none")){
-			playerHelper.setPlayerSuffix(targetPlayer, "");
-			playerHelper.sendServerMessage(commandSender.getName() + " reset the tag of " + targetName + "\u00a7f!");
+			playerHelper.setPlayerSuffix(target, "");
+			playerHelper.sendServerMessage(commandSender.getName() + " reset the tag of " + target.getName() + "\u00a7f!");
 			
 		}else{
-			playerHelper.setPlayerSuffix(targetPlayer, " " + tag);
-			playerHelper.sendServerMessage(commandSender.getName() + " set tag of " + targetName + " to " + tag + "\u00a7f!");
+			playerHelper.setPlayerSuffix(target, " " + tag);
+			playerHelper.sendServerMessage(commandSender.getName() + " set tag of " + target.getName() + " to " + tag + "\u00a7f!");
 		}
 	}
 	

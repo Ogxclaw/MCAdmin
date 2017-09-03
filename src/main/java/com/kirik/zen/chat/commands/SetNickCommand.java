@@ -8,8 +8,8 @@ import com.kirik.zen.commands.system.ICommand.Help;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
 import com.kirik.zen.commands.system.ICommand.Usage;
-import com.kirik.zen.core.util.PlayerNotFoundException;
 import com.kirik.zen.core.util.Utils;
+import com.kirik.zen.core.util.ZenPlayer;
 import com.kirik.zen.main.PermissionDeniedException;
 import com.kirik.zen.main.ZenCommandException;
 
@@ -25,47 +25,53 @@ public class SetNickCommand extends ICommand {
 			throw new ZenCommandException(this.getUsage());
 		
 		if(!(commandSender instanceof Player)) {
-			String targetName = playerHelper.completePlayerName(args[0], false);
-			
-			if(targetName == null)
-				throw new PlayerNotFoundException();
-			
-			Player targetPlayer = playerHelper.matchPlayerSingle(args[0]);
+			Player target = playerHelper.matchPlayerSingle(args[0]);
 			
 			String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
 			if(tag.equals("none")){
-				targetPlayer.setDisplayName(targetPlayer.getName());
-				playerHelper.sendServerMessage("CONSOLE reset the nickname of " + targetName + "\u00a7f!");
+				target.setDisplayName(target.getName());
+				playerHelper.sendServerMessage("CONSOLE reset the nickname of " + target.getName() + "\u00a7f!");
 				
 			}else{
-				targetPlayer.setDisplayName(tag);
-				playerHelper.sendServerMessage("CONSOLE set the nickname of " + targetName + " to " + tag + "\u00a7f!");
+				target.setDisplayName(tag);
+				playerHelper.sendServerMessage("CONSOLE set the nickname of " + target.getName() + " to " + tag + "\u00a7f!");
 			}
 			return;
 		}
 		
-		String targetName = playerHelper.completePlayerName(args[0], false);
+		Player player = (Player)commandSender;
+		Player target = playerHelper.matchPlayerSingle(args[0]);
 		
-		if(targetName == null)
-			throw new PlayerNotFoundException();
-		
-		Player targetPlayer = playerHelper.matchPlayerSingle(args[0]);
-		
-		int senderLevel = playerHelper.getPlayerLevel((Player)commandSender);
-		int targetLevel = playerHelper.getPlayerLevel(targetPlayer);
-		
-		if(senderLevel <= targetLevel && targetPlayer != (Player)commandSender)
+		if(playerHelper.getPlayerLevel(player) <= playerHelper.getPlayerLevel(target) && target != player)
 			throw new PermissionDeniedException();
 		
 		String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
 		if(tag.equals("none")){
-			targetPlayer.setDisplayName(targetPlayer.getName());
-			playerHelper.sendServerMessage(commandSender.getName() + " reset the nickname of " + targetName + "\u00a7f!");
+			target.setDisplayName(target.getName());
+			playerHelper.sendServerMessage(commandSender.getName() + " reset the nickname of " + target.getName() + "\u00a7f!");
 			
 		}else{
-			targetPlayer.setDisplayName(tag);
-			playerHelper.sendServerMessage(commandSender.getName() + " set the nickname of " + targetName + " to " + tag + "\u00a7f!");
+			target.setDisplayName(tag);
+			playerHelper.sendServerMessage(commandSender.getName() + " set the nickname of " + target.getName() + " to " + tag + "\u00a7f!");
 		}
+		
+		//TODO getting there with the player rework thing...
+		/*Player player = (Player)commandSender;
+		ZenPlayer zenPlayer = new ZenPlayer(player.getUniqueId());
+		Player target = playerHelper.matchPlayerSingle(args[0]);
+		
+		if(playerHelper.getPlayerLevel(player) <= playerHelper.getPlayerLevel(target) && target != player)
+			throw new PermissionDeniedException();
+		
+		String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
+		if(tag.equals("none")){
+			zenPlayer.setDisplayName(zenPlayer.getName());
+			playerHelper.sendServerMessage(commandSender.getName() + " reset the nickname of " + target.getName() + "\u00a7f!");
+			
+		}else{
+			zenPlayer.setDisplayName(tag);
+			playerHelper.sendServerMessage(commandSender.getName() + " set the nickname of " + target.getName() + " to " + tag + "\u00a7f!");
+		}*/
 	}
 
 }

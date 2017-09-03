@@ -21,7 +21,7 @@ public class BansPlayerListener extends BaseListener {
 			int currentDate = date.getDayOfYear();
 			int unbanDate = plugin.getBansConfig().getInt(uuid + ".unbanDate");
 			String banType = plugin.getBansConfig().getString(uuid + ".banType");
-			if(banType.equals("temp")){
+			if(banType.equals("temp")){ //TODO these dates don't work correctly. Compare a date with years to make it work better. Could include time as well.
 				if(unbanDate == currentDate){
 					plugin.playerHelper.unbanPlayer(uuid);
 					plugin.logToConsole("Temp Banned player \"" + playerName + "\" has been unbanned.");

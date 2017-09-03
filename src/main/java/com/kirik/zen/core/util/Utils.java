@@ -117,7 +117,6 @@ public class Utils {
 			}
 			
 			fileList = tmp.toArray(new String[tmp.size()]);
-			//TODO Don't be alarmed if this doesn't work. If it does, awesome
 			try {
 				jarFile.close();
 			} catch (IOException e) {

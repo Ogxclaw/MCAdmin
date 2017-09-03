@@ -8,6 +8,7 @@ import com.kirik.zen.commands.system.ICommand.Help;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
 import com.kirik.zen.commands.system.ICommand.Usage;
+import com.kirik.zen.main.PermissionDeniedException;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names({"summon", "tphere"})
@@ -19,12 +20,15 @@ public class SummonCommand extends ICommand {
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
 		//TODO Add silent summon
-		//TODO player level
 		if(args.length < 1)
 			throw new ZenCommandException(this.getUsage());
 		
 		final Player target = playerHelper.matchPlayerSingle(args[0]);
 		final Player player = (Player)commandSender;
+		
+		if(playerHelper.getPlayerLevel(player) <= playerHelper.getPlayerLevel(target))
+			throw new PermissionDeniedException();
+		
 		if(commandSender.hasPermission("zen.teleport.tp.override")){
 			target.teleport(player.getLocation());
 			playerHelper.sendDirectedMessage(commandSender, "Summoned " + target.getName());

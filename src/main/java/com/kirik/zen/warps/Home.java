@@ -2,7 +2,6 @@ package com.kirik.zen.warps;
 
 import org.bukkit.Location;
 
-//TODO doesn't work.
 public class Home {
 	
 	private String name;

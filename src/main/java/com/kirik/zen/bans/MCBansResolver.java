@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@Deprecated
 public class MCBansResolver {
 	
 	public static void checkPlayer(String uuid){

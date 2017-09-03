@@ -15,6 +15,8 @@ import com.kirik.zen.main.ZenCommandException;
 @Help("Gets ban and alt information about \nspecified user (MCBANS AND ZEN INFO ONLY)")
 @Usage("/lookup <name>")
 @Permission("zen.users.lookup")
+
+@Deprecated
 public class LookupCommand extends ICommand {
 
 	@Override

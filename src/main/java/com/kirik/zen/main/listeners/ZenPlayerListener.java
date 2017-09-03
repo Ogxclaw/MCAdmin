@@ -57,7 +57,6 @@ public class ZenPlayerListener extends BaseListener {
 		
 		player.setPlayerListName(plugin.playerHelper.getPersonalPlayerPrefix(player).replace('&', '\u00a7') + player.getName());
 		
-		//TODO Aggravating, but no better way to fix this at the moment. Unless I hard code ranks which is a big no-no
 		event.setJoinMessage(ChatColor.DARK_GREEN + "[+]" + plugin.playerHelper.getPlayerPrefix(player).replace('&', '\u00a7') + " " + player.getDisplayName() + ChatColor.YELLOW + " connected!");
 		plugin.playerHelper.sendDirectedMessage(player, "Welcome to the \u00a76Zenium Server Network\u00a7f!");
 		plugin.playerHelper.sendDirectedMessage(player, "We are currently in beta, so there's much more fun to come!");
@@ -96,9 +95,7 @@ public class ZenPlayerListener extends BaseListener {
 	}
 	
 	private void ZenOnPlayerChat(AsyncPlayerChatEvent event){
-		//TODO Just make a big ass hook class you fucking imbred.
 		Player player = event.getPlayer();
-		//TODO Factions integration
 		FPlayer mPlayer = FPlayerColl.get(player);
 		Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
 		

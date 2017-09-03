@@ -7,6 +7,7 @@ import com.kirik.zen.commands.system.ICommand;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
 import com.kirik.zen.commands.system.ICommand.Usage;
+import com.kirik.zen.main.PermissionDeniedException;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names("mute")
@@ -31,8 +32,13 @@ public class MuteCommand extends ICommand {
 			return;
 		}
 		
+		Player player = (Player)commandSender;
 		Player target = playerHelper.matchPlayerSingle(args[0]);
 		boolean isMuted = playerHelper.isMuted(target);
+		
+		if(playerHelper.getPlayerLevel(player) <= playerHelper.getPlayerLevel(target))
+			throw new PermissionDeniedException();
+		
 		if(isMuted){
 			playerHelper.setPlayerMuted(target, false);
 		}else{
