@@ -35,10 +35,10 @@ public class EconomyListener extends BaseListener {
 	@EventHandler
 	public void onSignClick(PlayerInteractEvent e){
 		Economy econ = new Economy(plugin);
-		/*if(e.getMaterial() == Material.FISHING_ROD) {
+		if(e.getMaterial() == Material.FISHING_ROD) {
 			//playerHelper.sendDirectedMessage(e.getPlayer(), "This is a thing.");
 			return;
-		}*/
+		}
 		if(e.getClickedBlock() == null) {
 			return;
 		}

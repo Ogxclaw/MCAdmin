@@ -9,7 +9,7 @@ import com.kirik.zen.commands.system.ICommand.Help;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
 import com.kirik.zen.commands.system.ICommand.Usage;
-import com.kirik.zen.main.PermissionDeniedException;
+import com.kirik.zen.config.PlayerConfiguration;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names({"tp", "teleport", "tele"})
@@ -27,11 +27,17 @@ public class TpCommand extends ICommand {
 		final Player target = playerHelper.matchPlayerSingle(args[0]);
 		final Location targetLocation = target.getLocation();
 		final Player player = (Player)commandSender;
+		PlayerConfiguration playerConfig = new PlayerConfiguration(player.getUniqueId());
+		Location prevLoc = player.getLocation();
+		prevLoc.setYaw(player.getLocation().getYaw());
+		prevLoc.setPitch(player.getLocation().getPitch());
 		
-		if(playerHelper.getPlayerLevel(player) <= playerHelper.getPlayerLevel(target))
-			throw new PermissionDeniedException();
+		/*if(playerHelper.getPlayerLevel(player) <= playerHelper.getPlayerLevel(target))
+			throw new PermissionDeniedException();*/
 	
 		if(commandSender.hasPermission("zen.teleport.tp.override")){
+			playerConfig.getPlayerConfig().set("previousLocation", prevLoc);
+			playerConfig.savePlayerConfig();
 			player.teleport(targetLocation);
 			playerHelper.sendDirectedMessage(commandSender, "Teleported to " + target.getName());
 			return;
@@ -39,6 +45,8 @@ public class TpCommand extends ICommand {
 		playerHelper.sendDirectedMessage(commandSender, "Please wait 5 seconds for teleportation.");
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run(){
+				playerConfig.getPlayerConfig().set("previousLocation", prevLoc);
+				playerConfig.savePlayerConfig();
 				player.teleport(targetLocation);
 				playerHelper.sendDirectedMessage(commandSender, "Teleported to " + target.getName());
 			}

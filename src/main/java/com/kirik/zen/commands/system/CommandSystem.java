@@ -14,11 +14,13 @@ import com.kirik.zen.main.PermissionDeniedException;
 
 public class CommandSystem {
 	private final Zen plugin;
+	private PlayerHelper playerHelper;
 	private final Map<String, ICommand> commands = new HashMap<>();
 
 	public CommandSystem(Zen plugin) {
 		this.plugin = plugin;
 		plugin.commandSystem = this;
+		playerHelper = plugin.playerHelper;
 		scanCommands();
 	}
 
@@ -89,9 +91,9 @@ public class CommandSystem {
 				String logmsg = "Zen Command denied: " + playerName + ": " + cmd + " " + argStr;
 				plugin.logErrorToConsole(logmsg);
 
-				PlayerHelper.sendDirectedMessage(commandSender, e.getMessage(), e.getColor());
+				playerHelper.sendDirectedMessage(commandSender, e.getMessage(), e.getColor());
 			} catch (ZenCommandException e) {
-				PlayerHelper.sendDirectedMessage(commandSender, e.getMessage(), e.getColor());
+				playerHelper.sendDirectedMessage(commandSender, e.getMessage(), e.getColor());
 			} catch (Exception e) {
 				if (commandSender.hasPermission("zen.detailederrors")) {
 					plugin.playerHelper.sendDirectedMessage(commandSender, "Command error: " + e + " in " + e.getStackTrace()[0]);

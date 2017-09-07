@@ -11,6 +11,7 @@ import com.kirik.zen.commands.system.ICommand.Help;
 import com.kirik.zen.commands.system.ICommand.Names;
 import com.kirik.zen.commands.system.ICommand.Permission;
 import com.kirik.zen.commands.system.ICommand.Usage;
+import com.kirik.zen.config.PlayerConfiguration;
 import com.kirik.zen.main.ZenCommandException;
 
 @Names("wild")
@@ -24,6 +25,10 @@ public class WildCommand extends ICommand {
 		Player player = (Player)commandSender;
 		//playerHelper.hasBlockAirAboveHead(player);
 		//playerHelper.hasBlockBelow(player);
+		PlayerConfiguration playerConfig = new PlayerConfiguration(player.getUniqueId());
+		Location prevLoc = player.getLocation();
+		prevLoc.setYaw(player.getLocation().getYaw());
+		prevLoc.setPitch(player.getLocation().getPitch());
 		Location newLoc = randomLocation(player);
 		while(player.getWorld().getBlockAt(newLoc.getBlockX(), newLoc.getBlockY() - 1, newLoc.getBlockZ()).isLiquid() || 
 				player.getWorld().getBlockAt(newLoc.getBlockX(), newLoc.getBlockY() - 2, newLoc.getBlockZ()).isLiquid() ||
@@ -37,8 +42,24 @@ public class WildCommand extends ICommand {
 		while(randomLocation(player).getZ() > player.getWorld().getWorldBorder().getSize()){
 			newLoc = randomLocation(player);
 		}
-		player.teleport(newLoc);
-		playerHelper.sendDirectedMessage(player, "Teleported to a random location!");
+		if(commandSender.hasPermission("zen.teleport.tp.override")){
+			playerConfig.getPlayerConfig().set("previousLocation", prevLoc);
+			playerConfig.savePlayerConfig();
+			player.teleport(newLoc);
+			playerHelper.sendDirectedMessage(player, "Teleported to a random location!");
+			return;
+		}
+		playerHelper.sendDirectedMessage(commandSender, "Please wait 5 seconds for teleportation.");
+		final Location finalLoc = newLoc;
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			public void run(){
+				playerConfig.getPlayerConfig().set("previousLocation", prevLoc);
+				playerConfig.savePlayerConfig();
+				player.teleport(finalLoc);
+				playerHelper.sendDirectedMessage(player, "Teleported to a random location!");
+			}
+		}, 100L);
+		//player.teleport(newLoc);
 	}
 	
 	private Location randomLocation(Player player){

@@ -25,6 +25,9 @@ import com.kirik.zen.main.ZenCommandException;
 @Usage("/help [commandName]")
 @Permission("zen.help")
 public class HelpCommand extends ICommand {
+	
+	public static List<ItemStack> page1 = new ArrayList<ItemStack>();
+	public static List<ItemStack> page2 = new ArrayList<ItemStack>();
 
 	@Override
 	public void run(CommandSender commandSender, String[] args, String argStr, String commandName) throws ZenCommandException {
@@ -39,35 +42,7 @@ public class HelpCommand extends ICommand {
 				playerHelper.sendDirectedMessage(commandSender, line);
 			}
 			playerHelper.sendDirectedMessage(commandSender, "Usage: /" + args[0] + " " + val.getUsage());
-		}else{
-			
-			/*ItemStack redShulker = new ItemStack(Material.WOOL, 1, (byte)4);
-			ItemMeta redMeta = redShulker.getItemMeta();
-			redMeta.setDisplayName("Sell");
-			redShulker.setItemMeta(redMeta);
-			customInv.setItem(0, redShulker);
-			ItemStack greenShulker = new ItemStack(Material.WOOL, 1, (byte)5);
-			ItemMeta greenMeta = redShulker.getItemMeta();
-			greenMeta.setDisplayName("Buy");
-			greenShulker.setItemMeta(greenMeta);
-			customInv.setItem(8, greenShulker);*/
-			
-			/*Player player = (Player)commandSender;
-			String ret = "Available commands: /";;
-			for(String key : new PriorityQueue<>(commands.keySet())){
-				if(key == "\u00a7")
-					continue;
-				
-				ICommand val = commands.get(key);
-				if(!val.canPlayerUseCommand(commandSender))
-					continue;
-				
-				
-				ret += key + ", /";
-			}
-			ret = ret.substring(0, ret.length() - 3);
-			playerHelper.sendDirectedMessage(commandSender, ret);*/
-			
+		}else{	
 			Player player = (Player)commandSender;
 			List<ItemStack> stacks = new ArrayList<ItemStack>();
 			String ret = "Available commands: /";
@@ -109,11 +84,29 @@ public class HelpCommand extends ICommand {
 			}
 			ret = ret.substring(0, ret.length() - 3);
 			playerHelper.sendDirectedMessage(commandSender, ret);
-			Inventory helpInv = plugin.getServer().createInventory(null, i, "\u00a75[Zen] \u00a78Help Menu");
-			for(ItemStack stack : stacks){
-				helpInv.addItem(stack);
+			if(i > 54) {
+				i = 54;
 			}
-			player.openInventory(helpInv);
+			Inventory helpInv1 = plugin.getServer().createInventory(null, i, "\u00a75[Zen] \u00a78Help Menu (Page 1)");
+			int length = 0;
+			for(ItemStack stack : stacks){
+				if(length == 53) {
+					ItemStack page = new ItemStack(Material.PAPER, 1);
+					ItemMeta meta = page.getItemMeta();
+					meta.setDisplayName("\u00a7aNext Page");
+					page.setItemMeta(meta);
+					helpInv1.addItem(page);
+					page1.add(page);
+				}
+				if(length > 52) {
+					page2.add(stack);
+				}else {
+					helpInv1.addItem(stack);
+					page1.add(stack);
+				}
+				length += 1;
+			}
+			player.openInventory(helpInv1);
 		}
 	}
 }

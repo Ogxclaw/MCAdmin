@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_12_R1.command.ColouredConsoleSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.kirik.zen.chat.listeners.SuffixListener;
 import com.kirik.zen.commands.system.CommandSystem;
 import com.kirik.zen.componentsystem.ComponentSystem;
 import com.kirik.zen.config.BansConfiguration;
@@ -19,6 +20,7 @@ import com.kirik.zen.core.util.PlayerHelper;
 import com.kirik.zen.economy.Economy;
 import com.kirik.zen.economy.EconomyConfiguration;
 import com.kirik.zen.economy.listener.EconomyListener;
+import com.kirik.zen.fun.SuffixConfiguration;
 import com.kirik.zen.main.SignMenu;
 import com.kirik.zen.main.StateContainer;
 import com.kirik.zen.main.console.ZenConsoleCommands;
@@ -47,6 +49,7 @@ public class Zen extends JavaPlugin {
 	private UUIDConfiguration uuidConfig;
 	private WarpsConfiguration warpsConfig;
 	private EconomyConfiguration ecoConfig;
+	private SuffixConfiguration suffixConfig;
 	
 	public Vanish vanish = new Vanish(this);
 	
@@ -101,6 +104,10 @@ public class Zen extends JavaPlugin {
 		ecoConfig.createEcoDefaults();
 		this.saveEcoConfig();
 		
+		suffixConfig = new SuffixConfiguration();
+		suffixConfig.createSuffixConfig();
+		suffixConfig.createSuffixDefaults();
+		this.saveSuffixConfig();
 		
 		setupWorldEdit();
 		logToConsole("WorldEdit Hooked.");
@@ -119,6 +126,7 @@ public class Zen extends JavaPlugin {
 		new ZenPlayerListener();
 		new InventoryListener();
 		new EconomyListener();
+		new SuffixListener();
 		componentSystem.registerListeners();
 		logToConsole("Listeners loaded.");
 		
@@ -162,6 +170,14 @@ public class Zen extends JavaPlugin {
 	}
 	
 	//START CONFIGS
+	public FileConfiguration getSuffixConfig() {
+		return suffixConfig.getSuffixConfig();
+	}
+	
+	public void saveSuffixConfig() {
+		suffixConfig.saveSuffixConfig();
+	}
+	
 	public FileConfiguration getEcoConfig(){
 		return ecoConfig.getEcoConfig();
 	}

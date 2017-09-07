@@ -12,6 +12,9 @@ import com.kirik.zen.core.util.Utils;
 import com.kirik.zen.main.PermissionDeniedException;
 import com.kirik.zen.main.ZenCommandException;
 
+//TODO make new "tag" command. Lets you pick from a set of tags, should you have the permission to pick it
+//TODO used for donators picking their suffixes
+//TODO make a setperm <player> <perm> command so a player can receive a permission upon donating.
 @Names("settag")
 @Help("Changes or resets the tag of a player")
 @Usage("/settag <player> <tag|none>")

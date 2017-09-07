@@ -45,7 +45,12 @@ public class SetNickCommand extends ICommand {
 		if(playerHelper.getPlayerLevel(player) <= playerHelper.getPlayerLevel(target) && target != player)
 			throw new PermissionDeniedException();
 		
-		String tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
+		String tag = "";
+		if(player.hasPermission("zen.setnick.color")) {
+			tag = Utils.concatArray(args, 1, "").replace('$', '\u00a7');
+		}else {
+			tag = Utils.concatArray(args, 1, "");
+		}
 		if(tag.equals("none")){
 			target.setDisplayName(target.getName());
 			playerHelper.sendServerMessage(commandSender.getName() + " reset the nickname of " + target.getName() + "\u00a7f!");

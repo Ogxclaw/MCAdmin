@@ -126,7 +126,7 @@ public class PlayerHelper extends StateContainer {
 		commandSender.sendMessage(s);
 	}
 	
-	public static void sendDirectedMessage(CommandSender commandSender, String s, char c){
+	public void sendDirectedMessage(CommandSender commandSender, String s, char c){
 		s = "\u00a7" + c + "[Zen] \u00a7f" + s;
 		commandSender.sendMessage(s);
 	}
