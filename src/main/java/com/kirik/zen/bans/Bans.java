@@ -12,7 +12,6 @@ import com.kirik.zen.core.Zen;
 import com.kirik.zen.main.offlinebukkit.OfflinePlayer;
 
 public class Bans {
-	
 	private Zen plugin;
 	
 	@SuppressWarnings("unused")
