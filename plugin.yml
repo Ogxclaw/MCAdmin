@@ -1,0 +1,9 @@
+name: Zen
+main: com.kirik.zen.core.Zen
+version: 1.0.0
+depend: [Vault, PermissionsEx, LegacyFactions, WorldEdit]
+commands:
+  zen:
+    description: Runs any Zen command in the console
+    permission: zen.no_one_has_this_ever
+    usage: /<command>

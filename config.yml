@@ -1,0 +1,9 @@
+# Zen Config
+motd: 'Welcome %p!'
+players:
+  Ogxclaw:
+    home:
+      x: 100
+      y: 100
+      z: 100
+silentMode: false
